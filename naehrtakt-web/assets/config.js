@@ -13,8 +13,8 @@ window.NT_CONFIG = {
   anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhldWV4b3ZkaXBkaWl1empwemtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2ODIzMzUsImV4cCI6MjA5OTI1ODMzNX0.b-rm79RT7yoTa173ykRXkYuVD_Snva8BywHIqo0X09I",
 
   // Preis / Kauf – Einmal-Lizenz
-  price:       "29 €",
-  priceValue:  29.00,
+  price:       "2,99 €",
+  priceValue:  2.99,
   currency:    "EUR",
   licensePrefix: "NT",
 

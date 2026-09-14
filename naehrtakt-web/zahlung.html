@@ -43,7 +43,7 @@
 
         <p class="eyebrow center" style="text-align:center">Kauf abschließen</p>
         <h1 class="center">Nährtakt kaufen</h1>
-        <p class="lead center" style="max-width:52ch;margin:0 auto 8px">Einmalig <strong><span id="buyAmount">29 €</span></strong> –
+        <p class="lead center" style="max-width:52ch;margin:0 auto 8px">Einmalig <strong><span id="buyAmount">2,99 €</span></strong> –
           kein Abo. Nach Zahlungseingang schicken wir dir deinen Lizenzschlüssel per E-Mail; danach schaltest du
           Nährtakt unter <a href="freischalten.html">Freischalten</a> frei.</p>
 
@@ -171,7 +171,7 @@
   var C = window.NT_CONFIG || {};
   var P = C.pay || {};
 
-  var amountNum = (C.priceValue != null ? Number(C.priceValue) : 29);
+  var amountNum = (C.priceValue != null ? Number(C.priceValue) : 2.99);
   var amountEUR = amountNum.toFixed(2);                 // "29.00" – für EPC/PayPal
   var amountDisplay = C.price || (String(amountNum).replace(/\.0+$/, "") + " €");
   var purposeBase = (P.verwendung || "Naehrtakt-Lizenz").trim();

@@ -87,7 +87,7 @@ Im Repo **Settings → Secrets and variables → Actions → Tab _Secrets_ → N
 
 ⚠️ Als **Secret** anlegen, nicht als Variable. Danach löst jeder Push (oder
 _Actions → Deploy zu Hostinger → Run workflow_) den Upload aus. Der Verify-Schritt prüft
-live Titel, Dateigrößen und den Marker aus `deploy-version.txt` (aktuell `nt-v1-3e7c`).
+live Titel, Dateigrößen und den Marker aus `deploy-version.txt` (aktuell `nt-v2-a4f2`).
 
 - **„530 Login incorrect"** = `FTP_PASSWORD` falsch. **Nicht** wiederholt neu starten —
   Hostingers Brute-Force-Schutz sperrt sonst die Runner-IP (danach curl 28). Secret

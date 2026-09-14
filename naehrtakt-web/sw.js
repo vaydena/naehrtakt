@@ -1,7 +1,7 @@
 /* Nährtakt Service Worker – konservativ: nur GET + same-origin.
    Cross-Origin (Supabase-Lizenz/Backend) und alle Nicht-GET-Requests
    laufen unangetastet am SW vorbei. */
-const CACHE = "nt-app-v1";
+const CACHE = "nt-app-v2";
 
 /* App-Shell + statische Assets + öffentliche Seiten, die offline verfügbar sein müssen. */
 const SHELL = [

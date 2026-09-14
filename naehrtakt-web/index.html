@@ -55,7 +55,7 @@
         <p class="lead">Nährtakt zeigt dir, <strong>wann</strong> und <strong>in welchen Abständen</strong> du deine
           Präparate am besten einnimmst – als übersichtlichen Tagesplan und als Nachschlagewerk mit belegten Angaben.</p>
         <div class="cta-row">
-          <a class="btn accent lg" href="#preis">Einmal kaufen – <span id="ctaPrice">29 €</span></a>
+          <a class="btn accent lg" href="#preis">Einmal kaufen – <span id="ctaPrice">2,99 €</span></a>
           <a class="btn ghost lg" href="#demo">Live ausprobieren</a>
         </div>
         <p class="cta-note">Einmalzahlung, kein Abo · offline nutzbar · als App installierbar · Zahlung per Überweisung oder PayPal</p>
@@ -151,7 +151,7 @@
           schaltet Nährtakt auf deinen Geräten frei.</p>
         <div class="price-wrap">
           <div class="price-card">
-            <div class="amount"><span id="priceAmount">29</span> <small>€ einmalig</small></div>
+            <div class="amount"><span id="priceAmount">2,99</span> <small>€ einmalig</small></div>
             <span class="badge primary once">Lebenslange Lizenz</span>
             <ul class="price-list">
               <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Voller Tagesplan mit allen Zeitpunkten &amp; Dosen</span></li>
@@ -248,7 +248,7 @@
 
   // Preis/Jahr aus Konfiguration
   try {
-    var pv = (C.priceValue != null) ? String(C.priceValue).replace(/\.00$/, "") : "29";
+    var pv = (C.priceValue != null) ? String(C.priceValue).replace(/\.00$/, "").replace(".", ",") : "2,99";
     var pa = document.getElementById("priceAmount"); if (pa) pa.textContent = pv;
     var cp = document.getElementById("ctaPrice"); if (cp) cp.textContent = C.price || (pv + " €");
     var yr = document.getElementById("year"); if (yr) yr.textContent = new Date().getFullYear();

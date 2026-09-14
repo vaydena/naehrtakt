@@ -610,7 +610,7 @@ table.tbl td.wrap{white-space:normal;min-width:180px}
       '<div class="field"><label>Name</label><input class="input" id="noName"></div>'+
       '<div class="field"><label>E-Mail</label><input class="input" id="noEmail" type="email"></div>'+
       '<div class="row">'+
-        '<div class="field grow"><label>Betrag (€)</label><input class="input" id="noAmount" type="number" step="0.01" value="'+esc(NT.priceValue||29)+'"></div>'+
+        '<div class="field grow"><label>Betrag (€)</label><input class="input" id="noAmount" type="number" step="0.01" value="'+esc(NT.priceValue||2.99)+'"></div>'+
         '<div class="field grow"><label>Methode</label><select class="select" id="noMethod">'+
           '<option value="Überweisung">Überweisung</option><option value="PayPal">PayPal</option><option value="sonstige">sonstige</option>'+
         '</select></div>'+
@@ -880,7 +880,7 @@ table.tbl td.wrap{white-space:normal;min-width:180px}
       try{
         var oc = await adminApi("order_create",{
           ref:val("noRef")||undefined, name:val("noName"), email:val("noEmail"),
-          amount:+val("noAmount")||NT.priceValue||29, method:val("noMethod"), note:val("noNote") });
+          amount:+val("noAmount")||NT.priceValue||2.99, method:val("noMethod"), note:val("noNote") });
         toast("Bestellung angelegt.","ok"); closeSheet(); loadOrders(true);
         void oc;
       }catch(err){ toast(mapErr(err.code,err.status),"err"); }
