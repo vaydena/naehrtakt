@@ -1,0 +1,1057 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f7268" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16211d" media="(prefers-color-scheme: dark)">
+<title>Nährtakt · Betreiber</title>
+<meta name="description" content="Interner Betreiber-Bereich von Nährtakt.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/img/favicon-32.png" sizes="32x32">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+/* ── Betreiber-Bereich: nur operator-spezifisches Layout; Tokens/Komponenten aus app.css ── */
+body{background:var(--bg-2,var(--bg))}
+.view{display:none}
+.view.on{display:block}
+
+/* Zentrierter Lade-/Login-Zustand */
+.op-center{min-height:100dvh;display:grid;place-items:center;padding:22px}
+.op-spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--primary);animation:opspin .8s linear infinite}
+@keyframes opspin{to{transform:rotate(360deg)}}
+
+.login-card{width:100%;max-width:400px}
+.login-mark{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--primary);color:#fff;margin:0 auto 14px}
+
+/* Kopf + Tabs */
+.op-shell{max-width:1000px;margin:0 auto;padding:0 14px 40px}
+.op-head{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line);
+  margin:0 -14px 0;padding:10px 14px;display:flex;align-items:center;gap:10px}
+.op-brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.2px}
+.op-brand svg{width:26px;height:26px;flex:0 0 auto}
+.op-tabs{position:sticky;top:53px;z-index:19;background:var(--surface);border-bottom:1px solid var(--line);
+  margin:0 -14px 16px;padding:6px 8px;display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.op-tab{flex:0 0 auto;border:0;background:transparent;color:var(--muted);font:600 14px/1 var(--font);
+  padding:9px 13px;border-radius:var(--radius-pill);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:7px}
+.op-tab:hover{color:var(--ink);background:var(--bg-2)}
+.op-tab.on{color:var(--primary-ink);background:var(--primary)}
+.op-tab .cnt{font-size:11px;font-weight:800;background:rgba(0,0,0,.12);padding:1px 7px;border-radius:999px}
+.op-tab.on .cnt{background:rgba(255,255,255,.22)}
+
+/* KPI-Kacheln */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 15px}
+.kpi .n{font-size:26px;font-weight:800;letter-spacing:-.5px;line-height:1.05}
+.kpi .l{color:var(--muted);font-size:12.5px;margin-top:3px}
+.kpi .sub{margin-top:9px;display:flex;flex-wrap:wrap;gap:5px}
+.kpi.accent{border-top:3px solid var(--accent)}
+.kpi.primary{border-top:3px solid var(--primary)}
+
+/* Datentabelle (app.css hat keine) */
+.tbl-wrap{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
+table.tbl th,table.tbl td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}
+table.tbl th{background:var(--bg-2);color:var(--muted);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em;position:sticky;top:0}
+table.tbl tbody tr{cursor:pointer}
+table.tbl tbody tr:hover{background:var(--primary-050)}
+table.tbl tr:last-child td{border-bottom:0}
+table.tbl td.wrap{white-space:normal;min-width:180px}
+.cell-key{font-family:var(--mono);font-size:12.5px}
+.tbl-empty{padding:26px 16px;text-align:center;color:var(--muted)}
+
+/* Toolbar-Zeile (Suche/Filter/Neu) */
+.op-toolbar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-bottom:12px}
+.op-toolbar .grow{flex:1 1 180px;min-width:150px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--radius-pill);overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;color:var(--muted);font:600 13px/1 var(--font);padding:8px 13px;cursor:pointer}
+.seg button.on{background:var(--primary);color:#fff}
+
+/* Detail-Sheet (Modal, mobil unten) */
+.sheet-back{position:fixed;inset:0;z-index:60;background:rgba(10,25,22,.5);display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);width:100%;max-width:560px;max-height:88dvh;overflow:auto;box-shadow:var(--shadow-lg)}
+.sheet-head{position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--line);padding:14px 16px;display:flex;align-items:center;gap:10px;z-index:2}
+.sheet-head h3{margin:0;font-size:16px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.sheet-body{padding:16px}
+.sheet-x{border:0;background:var(--bg-2);width:32px;height:32px;border-radius:9px;cursor:pointer;color:var(--ink-soft);font-size:18px;line-height:1;flex:0 0 auto}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13.5px;margin:2px 0 4px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;word-break:break-word}
+.dev-row{display:flex;align-items:center;gap:8px;padding:9px 0;border-top:1px solid var(--line);font-size:13px}
+.dev-row .hash{font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+
+/* Mail-Ansicht */
+.mail-body{border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;background:var(--bg-2);
+  max-height:52dvh;overflow:auto;font-size:14px;line-height:1.55;word-break:break-word}
+.mail-body img{max-width:100%;height:auto;border-radius:6px}
+.mail-html{all:revert}
+.att{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:var(--radius-sm);font-size:13px;margin-top:8px;background:var(--surface)}
+
+/* Toast */
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);z-index:90;
+  background:var(--ink);color:#fff;padding:11px 16px;border-radius:var(--radius-pill);font-size:14px;font-weight:600;
+  box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:92vw}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.err{background:var(--danger)}
+#toast.ok{background:var(--ok)}
+
+.keybox{font-family:var(--mono);font-size:15px;background:var(--bg-2);border:1px dashed var(--accent);
+  border-radius:var(--radius-sm);padding:12px 14px;word-break:break-all;user-select:all}
+.hint-line{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink-soft);background:var(--warn-050);
+  border:1px solid var(--warn);border-radius:var(--radius-sm);padding:10px 12px}
+.hint-line svg{flex:0 0 auto;margin-top:1px;color:var(--warn)}
+.tool-card h3{margin:0 0 4px;font-size:15px}
+.tool-card p{margin:0 0 12px;color:var(--muted);font-size:13.5px}
+@media (max-width:560px){
+  .sheet{max-width:none;align-self:flex-end;border-radius:var(--radius) var(--radius) 0 0;max-height:92dvh}
+  .sheet-back{align-items:flex-end;padding:0}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Laden ─────────────────────────────────────────────────────────── -->
+<section class="view on" id="viewLoading">
+  <div class="op-center"><div class="op-spin" role="status" aria-label="Lädt"></div></div>
+</section>
+
+<!-- ── Login ─────────────────────────────────────────────────────────── -->
+<section class="view" id="viewLogin">
+  <div class="op-center">
+    <div class="card pad-lg login-card">
+      <div class="login-mark">
+        <svg viewBox="0 0 32 32" aria-hidden="true" width="30" height="30">
+          <path d="M8 22V10m0 0l8 12m0-12v12m0-12l8 12V10" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h1 style="text-align:center;font-size:19px;margin:0 0 2px">Nährtakt · Betreiber</h1>
+      <p class="muted" style="text-align:center;margin:0 0 18px;font-size:13.5px">Interner Bereich. Bitte Betreiber-Schlüssel eingeben.</p>
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="loginKey">Betreiber-Schlüssel</label>
+          <input class="input mono" id="loginKey" type="password" autocomplete="current-password"
+                 spellcheck="false" placeholder="NT-BETR-XXXX-XXXX-XXXX-XXXX" aria-describedby="loginHint">
+          <p class="tiny muted" id="loginHint" style="margin:6px 2px 0">Liegt nur lokal in <span class="mono">OPERATOR-KEY.local.txt</span>.</p>
+        </div>
+        <div id="loginMsg" role="alert" aria-live="assertive"></div>
+        <button class="btn primary block lg" id="loginBtn" type="submit">Anmelden</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ── Dashboard ─────────────────────────────────────────────────────── -->
+<section class="view" id="viewDash">
+  <div class="op-shell">
+    <header class="op-head">
+      <span class="op-brand">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <rect x="1" y="1" width="30" height="30" rx="8" fill="var(--primary)"/>
+          <path d="M8 22V10m0 0l8 12m0-12v12m0-12l8 12V10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Betreiber
+      </span>
+      <span class="grow"></span>
+      <button class="btn ghost sm" id="btnReload" type="button" title="Neu laden">Aktualisieren</button>
+      <button class="btn subtle sm" data-act="logout" type="button">Abmelden</button>
+    </header>
+
+    <nav class="op-tabs" id="opTabs" aria-label="Bereiche">
+      <button class="op-tab on" data-tab="overview" type="button">Übersicht</button>
+      <button class="op-tab" data-tab="licenses" type="button">Lizenzen</button>
+      <button class="op-tab" data-tab="activations" type="button">Aktivierungen</button>
+      <button class="op-tab" data-tab="orders" type="button">Bestellungen</button>
+      <button class="op-tab" data-tab="inbox" type="button">Posteingang</button>
+      <button class="op-tab" data-tab="tools" type="button">Werkzeuge</button>
+    </nav>
+
+    <div id="tabContent"></div>
+  </div>
+</section>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="sheetRoot"></div>
+
+<script src="assets/config.js"></script>
+<script>
+(function(){
+  "use strict";
+  var NT = window.NT_CONFIG || {};
+  var SS_KEY = "nt_admin_key";
+
+  /* ── State ───────────────────────────────────────────────────────── */
+  var state = {
+    adminKey: "",
+    tab: "overview",
+    lic:  { rows:[], offset:0, q:"", status:"", done:false, loading:false },
+    act:  { rows:[], loading:false },
+    ord:  { rows:[], offset:0, status:"", done:false, loading:false },
+    mail: { mode:"imap", mails:[], mailbox:"", log:[], logOffset:0, logDone:false }
+  };
+  var counts = { licenses:null, activations:null, orders:null, messages:null };
+
+  /* ── DOM-Helfer ──────────────────────────────────────────────────── */
+  function el(id){ return document.getElementById(id); }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function showView(v){
+    ["viewLoading","viewLogin","viewDash"].forEach(function(id){
+      el(id).classList.toggle("on", id==="view"+v.charAt(0).toUpperCase()+v.slice(1));
+    });
+  }
+  var toastT;
+  function toast(msg, kind){
+    var t = el("toast"); t.textContent = msg; t.className = ""; if(kind) t.classList.add(kind);
+    void t.offsetWidth; t.classList.add("on");
+    clearTimeout(toastT); toastT = setTimeout(function(){ t.classList.remove("on"); }, 3200);
+  }
+
+  /* ── Formatierung ────────────────────────────────────────────────── */
+  function fmtDate(iso){ if(!iso) return "—"; var d=new Date(iso); if(isNaN(d)) return "—";
+    return d.toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit",year:"numeric"}); }
+  function fmtDT(iso){ if(!iso) return "—"; var d=new Date(iso); if(isNaN(d)) return "—";
+    return d.toLocaleString("de-DE",{day:"2-digit",month:"2-digit",year:"2-digit",hour:"2-digit",minute:"2-digit"}); }
+  function fmtEur(n){ var v=Number(n||0); return v.toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2})+" €"; }
+  function shortHash(h){ h=String(h||""); return h.length>14 ? h.slice(0,8)+"…"+h.slice(-4) : h; }
+  function statusBadge(s){
+    if(s==="active")  return '<span class="badge ok">aktiv</span>';
+    if(s==="blocked") return '<span class="badge danger">gesperrt</span>';
+    if(s==="paid")    return '<span class="badge ok">bezahlt</span>';
+    if(s==="pending") return '<span class="badge warn">offen</span>';
+    if(s==="cancelled"||s==="canceled") return '<span class="badge">storniert</span>';
+    return '<span class="badge">'+esc(s||"—")+'</span>';
+  }
+
+  /* ── API-Client (spiegelt license.js-Header + x-admin-key) ───────── */
+  function mapErr(code, status){
+    var m = {
+      unauthorized:"Betreiber-Schlüssel ungültig.",
+      bad_json:"Ungültige Anfrage.", bad_id:"Ungültige Eingabe.", bad_status:"Ungültiger Status.",
+      bad_uid:"Ungültige Eingabe.", bad_index:"Ungültige Eingabe.",
+      not_found:"Nicht gefunden.", unknown_action:"Unbekannte Aktion.",
+      method_not_allowed:"Methode nicht erlaubt.", server_error:"Serverfehler. Bitte später erneut.",
+      mail_not_configured:"IMAP-Posteingang noch nicht konfiguriert.",
+      imap_connect_failed:"Verbindung zum Postfach fehlgeschlagen.",
+      imap_auth_failed:"Anmeldung am Postfach fehlgeschlagen (Zugangsdaten prüfen).",
+      imap_select_failed:"Postfach konnte nicht geöffnet werden.",
+      imap_closed:"Verbindung zum Postfach unterbrochen.",
+      imap_timeout:"Zeitüberschreitung beim Postfach.",
+      mail_too_large:"Die Nachricht ist zu groß.", attachment_too_large:"Der Anhang ist zu groß.",
+      delete_failed:"Löschen fehlgeschlagen.", network:"Keine Verbindung. Bist du online?"
+    };
+    return m[code] || (code ? code : ("Fehler ("+ (status||"?") +")"));
+  }
+  async function api(fn, action, body){
+    var res, txt, json;
+    try{
+      res = await fetch(NT.fnBase + "/" + fn, {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "apikey": NT.anonKey || "",
+          "Authorization":"Bearer " + (NT.anonKey || ""),
+          "x-admin-key": state.adminKey || ""
+        },
+        body: JSON.stringify(Object.assign({ action: action }, body || {}))
+      });
+    }catch(e){ var ne=new Error("network"); ne.code="network"; throw ne; }
+    txt = await res.text();
+    try{ json = txt ? JSON.parse(txt) : {}; }catch(e){ json = {}; }
+    if(!res.ok){
+      var code = (json && json.error) ? json.error : ("http_"+res.status);
+      var er = new Error(code); er.code = code; er.status = res.status; throw er;
+    }
+    return json;
+  }
+  var adminApi = function(a,b){ return api("naehrtakt-admin", a, b); };
+  var mailApi  = function(a,b){ return api("naehrtakt-mail",  a, b); };
+
+  /* ── Login / Boot ────────────────────────────────────────────────── */
+  function loginMsg(text, kind){
+    var m = el("loginMsg");
+    if(!text){ m.innerHTML=""; return; }
+    m.innerHTML = '<div class="card flat" style="margin:2px 0 12px;padding:10px 12px;border-left:3px solid var(--'+
+      (kind==="ok"?"ok":"danger")+')"><span class="badge '+(kind==="ok"?"ok":"danger")+'">'+
+      (kind==="ok"?"OK":"Fehler")+'</span> <span style="margin-left:6px">'+esc(text)+'</span></div>';
+  }
+  el("loginForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+    loginMsg("");
+    var key = el("loginKey").value.trim();
+    if(!key){ loginMsg("Bitte Betreiber-Schlüssel eingeben.","err"); return; }
+    var btn = el("loginBtn"); btn.disabled=true; var old=btn.textContent; btn.textContent="Prüfe …";
+    state.adminKey = key;
+    try{
+      await adminApi("login");
+      try{ sessionStorage.setItem(SS_KEY, key); }catch(_){}
+      el("loginKey").value="";
+      enterDash();
+    }catch(err){
+      state.adminKey="";
+      loginMsg(err.code==="network" ? mapErr("network") : "Schlüssel ungültig.", "err");
+      btn.disabled=false; btn.textContent=old;
+    }
+  });
+
+  async function boot(){
+    var saved="";
+    try{ saved = sessionStorage.getItem(SS_KEY) || ""; }catch(_){}
+    if(!saved){ showView("login"); setTimeout(function(){ el("loginKey").focus(); },60); return; }
+    state.adminKey = saved;
+    showView("loading");
+    try{ await adminApi("login"); enterDash(); }
+    catch(err){
+      try{ sessionStorage.removeItem(SS_KEY); }catch(_){}
+      state.adminKey="";
+      showView("login");
+      if(err.code!=="unauthorized") loginMsg(mapErr(err.code,err.status),"err");
+      setTimeout(function(){ el("loginKey").focus(); },60);
+    }
+  }
+
+  function enterDash(){ showView("dash"); switchTab(state.tab || "overview"); }
+
+  /* ── Tabs ────────────────────────────────────────────────────────── */
+  el("opTabs").addEventListener("click", function(e){
+    var b = e.target.closest(".op-tab"); if(!b) return;
+    switchTab(b.dataset.tab);
+  });
+  el("btnReload").addEventListener("click", function(){ switchTab(state.tab, true); });
+
+  function markTabs(){
+    Array.prototype.forEach.call(el("opTabs").children, function(b){
+      b.classList.toggle("on", b.dataset.tab===state.tab);
+    });
+  }
+  function switchTab(tab, force){
+    state.tab = tab; markTabs();
+    var c = el("tabContent");
+    if(tab==="overview")      renderOverview(c, force);
+    else if(tab==="licenses") renderLicenses(c, force);
+    else if(tab==="activations") renderActivations(c, force);
+    else if(tab==="orders")   renderOrders(c, force);
+    else if(tab==="inbox")    renderInbox(c, force);
+    else if(tab==="tools")    renderTools(c);
+  }
+  function busy(c){ c.innerHTML = '<div class="center" style="padding:40px 0"><div class="op-spin"></div></div>'; }
+  function errorBox(c, msg, retryTab){
+    c.innerHTML = '<div class="card pad-lg" style="border-left:3px solid var(--danger)">'+
+      '<p style="margin:0 0 12px"><span class="badge danger">Fehler</span> <span style="margin-left:6px">'+esc(msg)+'</span></p>'+
+      '<button class="btn subtle sm" data-act="retry" data-tab="'+esc(retryTab)+'">Erneut versuchen</button></div>';
+  }
+
+  /* ── Übersicht ───────────────────────────────────────────────────── */
+  async function renderOverview(c, force){
+    busy(c);
+    try{
+      var s = await adminApi("stats");
+      counts.licenses = s.licenses ? s.licenses.total : null;
+      counts.activations = s.activations ? s.activations.total : null;
+      counts.orders = s.orders ? s.orders.total : null;
+      counts.messages = s.messages ? s.messages.total : null;
+      updateTabCounts();
+      var lic=s.licenses||{}, act=s.activations||{}, ord=s.orders||{}, msg=s.messages||{};
+      var ev = Array.isArray(s.events_30d)?s.events_30d:[];
+      var evHtml = ev.length
+        ? '<div class="tbl-wrap"><div class="tbl-scroll"><table class="tbl"><thead><tr><th>Ereignis</th><th>Anzahl (30 T.)</th></tr></thead><tbody>'+
+          ev.map(function(r){ return '<tr style="cursor:default"><td>'+esc(r.kind)+'</td><td>'+esc(r.n)+'</td></tr>'; }).join("")+
+          '</tbody></table></div></div>'
+        : '<p class="muted tiny">Keine Ereignisse in den letzten 30 Tagen.</p>';
+      c.innerHTML =
+        '<div class="kpi-grid">'+
+          kpi(lic.total,"Lizenzen gesamt","primary",
+              '<span class="badge ok">'+ (lic.active||0) +' aktiv</span>'+
+              (lic.blocked?'<span class="badge danger">'+lic.blocked+' gesperrt</span>':'')+
+              '<span class="badge info">'+ (lic.activated||0) +' aktiviert</span>')+
+          kpi(act.total,"Aktivierungen (Geräte)","",
+              '<span class="badge">'+ (act.devices_licenses||0) +' Lizenzen mit Gerät</span>')+
+          kpi(ord.total,"Bestellungen","",
+              '<span class="badge warn">'+ (ord.pending||0) +' offen</span>'+
+              '<span class="badge ok">'+ (ord.paid||0) +' bezahlt</span>')+
+          kpi(fmtEur(ord.revenue),"Umsatz (bezahlt)","accent","")+
+          kpi(msg.total,"Nachrichten (Log)","",
+              (msg.unread?'<span class="badge warn">'+msg.unread+' ungelesen</span>':'<span class="badge ok">alle gelesen</span>'))+
+        '</div>'+
+        '<h3 style="margin:22px 2px 10px;font-size:15px">Ereignisse (30 Tage)</h3>'+ evHtml;
+    }catch(err){ errorBox(c, mapErr(err.code,err.status), "overview"); }
+  }
+  function kpi(n,l,cls,sub){
+    return '<div class="kpi '+(cls||"")+'"><div class="n">'+esc(n==null?"—":n)+'</div><div class="l">'+esc(l)+'</div>'+
+      (sub?'<div class="sub">'+sub+'</div>':'')+'</div>';
+  }
+  function updateTabCounts(){
+    var map={licenses:counts.licenses,activations:counts.activations,orders:counts.orders};
+    Array.prototype.forEach.call(el("opTabs").children, function(b){
+      var v=map[b.dataset.tab];
+      var base = b.dataset.tab==="licenses"?"Lizenzen":b.dataset.tab==="activations"?"Aktivierungen":b.dataset.tab==="orders"?"Bestellungen":null;
+      if(base!=null){ b.innerHTML = esc(base) + (v!=null?' <span class="cnt">'+esc(v)+'</span>':''); }
+    });
+  }
+
+  /* ── Lizenzen ────────────────────────────────────────────────────── */
+  function renderLicenses(c, force){
+    if(force){ state.lic={rows:[],offset:0,q:state.lic.q,status:state.lic.status,done:false,loading:false}; }
+    c.innerHTML =
+      '<div class="op-toolbar">'+
+        '<input class="input grow" id="licQ" type="search" placeholder="Suche: Schlüssel, Name, E-Mail …" value="'+esc(state.lic.q)+'">'+
+        '<div class="seg" id="licSeg">'+
+          '<button data-s="" class="'+(state.lic.status===""?"on":"")+'">Alle</button>'+
+          '<button data-s="active" class="'+(state.lic.status==="active"?"on":"")+'">Aktiv</button>'+
+          '<button data-s="blocked" class="'+(state.lic.status==="blocked"?"on":"")+'">Gesperrt</button>'+
+        '</div>'+
+        '<button class="btn ghost sm" data-act="lic-search" type="button">Suchen</button>'+
+        '<span class="grow" style="flex:1"></span>'+
+        '<button class="btn primary sm" data-act="lic-new" type="button">+ Neue Lizenz</button>'+
+      '</div>'+
+      '<div id="licList"></div>';
+    if(state.lic.rows.length===0 && !state.lic.done) loadLicenses(true);
+    else renderLicList();
+    var q=el("licQ"); if(q) q.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); doLicSearch(); }});
+  }
+  function doLicSearch(){
+    state.lic.q = (el("licQ")&&el("licQ").value.trim())||"";
+    state.lic.rows=[]; state.lic.offset=0; state.lic.done=false;
+    loadLicenses(true);
+  }
+  async function loadLicenses(replace){
+    if(state.lic.loading) return; state.lic.loading=true;
+    var box=el("licList"); if(replace&&box) busy(box);
+    try{
+      var r = await adminApi("licenses",{ q:state.lic.q, status:state.lic.status, limit:100, offset:state.lic.rows.length });
+      var rows = r.rows||[];
+      state.lic.rows = replace ? rows : state.lic.rows.concat(rows);
+      state.lic.done = rows.length < 100;
+      renderLicList();
+    }catch(err){ if(box) errorBox(box, mapErr(err.code,err.status), "licenses"); }
+    finally{ state.lic.loading=false; }
+  }
+  function renderLicList(){
+    var box=el("licList"); if(!box) return;
+    var rows=state.lic.rows;
+    if(!rows.length){ box.innerHTML='<div class="tbl-wrap"><div class="tbl-empty">Keine Lizenzen gefunden.</div></div>'; return; }
+    box.innerHTML =
+      '<div class="tbl-wrap"><div class="tbl-scroll"><table class="tbl"><thead><tr>'+
+        '<th>Schlüssel</th><th>Status</th><th>Name / E-Mail</th><th>Geräte</th><th>Zuletzt</th><th>Erstellt</th>'+
+      '</tr></thead><tbody>'+
+      rows.map(function(l){
+        return '<tr data-act="lic-open" data-id="'+esc(l.id)+'">'+
+          '<td class="cell-key">'+esc(l.key)+'</td>'+
+          '<td>'+statusBadge(l.status)+'</td>'+
+          '<td class="wrap">'+esc(l.name||"—")+(l.email?'<br><span class="muted tiny">'+esc(l.email)+'</span>':'')+'</td>'+
+          '<td>'+esc(l.activated_count!=null?l.activated_count:0)+' / '+esc(l.max_devices!=null?l.max_devices:"—")+'</td>'+
+          '<td>'+fmtDate(l.last_seen)+'</td>'+
+          '<td>'+fmtDate(l.created_at)+'</td>'+
+        '</tr>';
+      }).join("")+
+      '</tbody></table></div></div>'+
+      (state.lic.done ? '' : '<div class="center" style="margin-top:14px"><button class="btn subtle sm" data-act="lic-more" type="button">Mehr laden</button></div>');
+  }
+
+  function licSheet(l){
+    var devices = Array.isArray(l.devices)?l.devices:[];
+    var devHtml = devices.length
+      ? devices.map(function(d){
+          return '<div class="dev-row"><span class="grow" style="flex:1;min-width:0">'+
+            '<span class="hash">'+esc(shortHash(d.device_hash))+'</span>'+
+            '<br><span class="muted tiny">'+esc((d.user_agent||"").slice(0,60)||"unbekanntes Gerät")+' · zuletzt '+fmtDT(d.last_seen||d.created_at)+'</span></span>'+
+            '<button class="btn danger sm" data-act="dev-del" data-id="'+esc(d.id)+'" type="button">Entfernen</button></div>';
+        }).join("")
+      : '<p class="muted tiny">Noch kein Gerät aktiviert.</p>';
+    openSheet(esc(l.key),
+      '<dl class="kv">'+
+        '<dt>Status</dt><dd>'+statusBadge(l.status)+'</dd>'+
+        '<dt>Geräte</dt><dd>'+esc(l.activated_count!=null?l.activated_count:0)+' / '+esc(l.max_devices!=null?l.max_devices:"—")+'</dd>'+
+        '<dt>Erste Aktiv.</dt><dd>'+fmtDT(l.first_activated)+'</dd>'+
+        '<dt>Zuletzt</dt><dd>'+fmtDT(l.last_seen)+'</dd>'+
+        '<dt>Bestellung</dt><dd>'+(l.order_id?('#'+esc(l.order_id)):'—')+'</dd>'+
+        '<dt>Erstellt</dt><dd>'+fmtDT(l.created_at)+'</dd>'+
+      '</dl>'+
+      '<hr style="border:0;border-top:1px solid var(--line);margin:14px 0">'+
+      '<div class="field"><label>Name</label><input class="input" id="edName" value="'+esc(l.name||"")+'"></div>'+
+      '<div class="field"><label>E-Mail</label><input class="input" id="edEmail" type="email" value="'+esc(l.email||"")+'"></div>'+
+      '<div class="row">'+
+        '<div class="field grow"><label>Max. Geräte</label><input class="input" id="edMax" type="number" min="1" max="99" value="'+esc(l.max_devices!=null?l.max_devices:5)+'"></div>'+
+      '</div>'+
+      '<div class="field"><label>Notiz</label><textarea class="textarea" id="edNote" rows="2">'+esc(l.note||"")+'</textarea></div>'+
+      '<div class="row" style="margin-top:6px">'+
+        '<button class="btn primary" data-act="lic-save" data-id="'+esc(l.id)+'" type="button">Speichern</button>'+
+        (l.status==="active"
+          ? '<button class="btn subtle" data-act="lic-block" data-id="'+esc(l.id)+'" type="button">Sperren</button>'
+          : '<button class="btn subtle" data-act="lic-unblock" data-id="'+esc(l.id)+'" type="button">Entsperren</button>')+
+      '</div>'+
+      '<h4 style="margin:20px 0 6px;font-size:14px">Geräte ('+devices.length+')</h4>'+ devHtml +
+      '<hr style="border:0;border-top:1px solid var(--line);margin:16px 0 12px">'+
+      '<button class="btn danger block" data-act="lic-del" data-id="'+esc(l.id)+'" data-key="'+esc(l.key)+'" type="button">Lizenz löschen</button>'
+    );
+  }
+  function licCreateSheet(prefill){
+    prefill = prefill || {};
+    openSheet("Neue Lizenz",
+      '<div class="field"><label>Name</label><input class="input" id="nlName" value="'+esc(prefill.name||"")+'"></div>'+
+      '<div class="field"><label>E-Mail</label><input class="input" id="nlEmail" type="email" value="'+esc(prefill.email||"")+'"></div>'+
+      '<div class="field"><label>Max. Geräte</label><input class="input" id="nlMax" type="number" min="1" max="99" value="5"></div>'+
+      '<div class="field"><label>Notiz</label><textarea class="textarea" id="nlNote" rows="2">'+esc(prefill.note||"")+'</textarea></div>'+
+      (prefill.order_id?'<p class="tiny muted">Wird mit Bestellung #'+esc(prefill.order_id)+' verknüpft und diese auf „bezahlt" gesetzt.</p>':'')+
+      '<button class="btn primary block lg" data-act="lic-create" '+(prefill.order_id?'data-order="'+esc(prefill.order_id)+'"':'')+' type="button">Lizenz erstellen</button>'+
+      '<p class="tiny muted" style="margin-top:10px">Der Schlüssel wird serverseitig erzeugt und danach hier angezeigt.</p>'
+    );
+  }
+
+  /* ── Aktivierungen ───────────────────────────────────────────────── */
+  async function renderActivations(c, force){
+    busy(c);
+    try{
+      var r = await adminApi("activations",{ limit:200 });
+      state.act.rows = r.rows||[];
+      var rows = state.act.rows;
+      c.innerHTML =
+        '<p class="muted tiny" style="margin:0 0 12px">Alle aktiven Geräte-Aktivierungen (max. 200, neueste zuerst).</p>'+
+        (rows.length
+          ? '<div class="tbl-wrap"><div class="tbl-scroll"><table class="tbl"><thead><tr>'+
+              '<th>Schlüssel</th><th>Gerät (Hash)</th><th>Client</th><th>Aktiviert</th><th>Zuletzt</th><th></th>'+
+            '</tr></thead><tbody>'+
+            rows.map(function(a){
+              return '<tr style="cursor:default">'+
+                '<td class="cell-key">'+esc(a.key||("Lizenz #"+a.license_id))+'</td>'+
+                '<td class="cell-key">'+esc(shortHash(a.device_hash))+'</td>'+
+                '<td class="wrap"><span class="muted tiny">'+esc((a.user_agent||"—").slice(0,54))+'</span></td>'+
+                '<td>'+fmtDT(a.created_at)+'</td>'+
+                '<td>'+fmtDT(a.last_seen)+'</td>'+
+                '<td><button class="btn danger sm" data-act="act-del" data-id="'+esc(a.id)+'" type="button">Entfernen</button></td>'+
+              '</tr>';
+            }).join("")+
+            '</tbody></table></div></div>'
+          : '<div class="tbl-wrap"><div class="tbl-empty">Noch keine Aktivierungen.</div></div>');
+    }catch(err){ errorBox(c, mapErr(err.code,err.status), "activations"); }
+  }
+
+  /* ── Bestellungen ────────────────────────────────────────────────── */
+  function renderOrders(c, force){
+    if(force){ state.ord={rows:[],offset:0,status:state.ord.status,done:false,loading:false}; }
+    c.innerHTML =
+      '<div class="op-toolbar">'+
+        '<div class="seg" id="ordSeg">'+
+          '<button data-s="" class="'+(state.ord.status===""?"on":"")+'">Alle</button>'+
+          '<button data-s="pending" class="'+(state.ord.status==="pending"?"on":"")+'">Offen</button>'+
+          '<button data-s="paid" class="'+(state.ord.status==="paid"?"on":"")+'">Bezahlt</button>'+
+        '</div>'+
+        '<span class="grow" style="flex:1"></span>'+
+        '<button class="btn primary sm" data-act="ord-new" type="button">+ Neue Bestellung</button>'+
+      '</div>'+
+      '<div id="ordList"></div>';
+    loadOrders(true);
+  }
+  async function loadOrders(replace){
+    if(state.ord.loading) return; state.ord.loading=true;
+    var box=el("ordList"); if(replace&&box) busy(box);
+    try{
+      var r = await adminApi("orders",{ status:state.ord.status||undefined, limit:200, offset:state.ord.rows.length });
+      var rows=r.rows||[];
+      state.ord.rows = replace?rows:state.ord.rows.concat(rows);
+      state.ord.done = rows.length<200;
+      renderOrdList();
+    }catch(err){ if(box) errorBox(box, mapErr(err.code,err.status), "orders"); }
+    finally{ state.ord.loading=false; }
+  }
+  function renderOrdList(){
+    var box=el("ordList"); if(!box) return; var rows=state.ord.rows;
+    if(!rows.length){ box.innerHTML='<div class="tbl-wrap"><div class="tbl-empty">Keine Bestellungen.</div></div>'; return; }
+    box.innerHTML =
+      '<div class="tbl-wrap"><div class="tbl-scroll"><table class="tbl"><thead><tr>'+
+        '<th>Referenz</th><th>Status</th><th>Käufer</th><th>Betrag</th><th>Methode</th><th>Lizenz</th><th>Datum</th>'+
+      '</tr></thead><tbody>'+
+      rows.map(function(o){
+        return '<tr data-act="ord-open" data-id="'+esc(o.id)+'">'+
+          '<td class="cell-key">'+esc(o.ref||("#"+o.id))+'</td>'+
+          '<td>'+statusBadge(o.status)+'</td>'+
+          '<td class="wrap">'+esc(o.name||"—")+(o.email?'<br><span class="muted tiny">'+esc(o.email)+'</span>':'')+'</td>'+
+          '<td>'+fmtEur(o.amount)+'</td>'+
+          '<td>'+esc(o.method||"—")+'</td>'+
+          '<td class="cell-key">'+(o.license_key?esc(o.license_key):'<span class="muted tiny">—</span>')+'</td>'+
+          '<td>'+fmtDate(o.created_at)+'</td>'+
+        '</tr>';
+      }).join("")+
+      '</tbody></table></div></div>'+
+      (state.ord.done?'':'<div class="center" style="margin-top:14px"><button class="btn subtle sm" data-act="ord-more" type="button">Mehr laden</button></div>');
+  }
+  function ordSheet(o){
+    var linked = !!o.license_id;
+    openSheet(esc(o.ref||("Bestellung #"+o.id)),
+      '<dl class="kv">'+
+        '<dt>Status</dt><dd>'+statusBadge(o.status)+'</dd>'+
+        '<dt>Käufer</dt><dd>'+esc(o.name||"—")+'</dd>'+
+        '<dt>E-Mail</dt><dd>'+esc(o.email||"—")+'</dd>'+
+        '<dt>Betrag</dt><dd>'+fmtEur(o.amount)+' '+esc(o.currency||"")+'</dd>'+
+        '<dt>Methode</dt><dd>'+esc(o.method||"—")+'</dd>'+
+        '<dt>Lizenz</dt><dd>'+(o.license_key?('<span class="cell-key">'+esc(o.license_key)+'</span>'):'—')+'</dd>'+
+        '<dt>Erstellt</dt><dd>'+fmtDT(o.created_at)+'</dd>'+
+      '</dl>'+
+      '<div class="field"><label>Notiz</label><textarea class="textarea" id="odNote" rows="2">'+esc(o.note||"")+'</textarea></div>'+
+      '<div class="field"><label>Status ändern</label><select class="select" id="odStatus">'+
+        ['pending','paid','cancelled'].map(function(s){ return '<option value="'+s+'"'+(o.status===s?' selected':'')+'>'+
+          (s==="pending"?"offen":s==="paid"?"bezahlt":"storniert")+'</option>'; }).join("")+
+      '</select></div>'+
+      '<div class="row" style="margin-top:6px">'+
+        '<button class="btn primary" data-act="ord-save" data-id="'+esc(o.id)+'" type="button">Speichern</button>'+
+      '</div>'+
+      (!linked
+        ? '<hr style="border:0;border-top:1px solid var(--line);margin:16px 0 12px">'+
+          '<button class="btn accent block" data-act="ord-mklic" data-id="'+esc(o.id)+'" '+
+            'data-name="'+esc(o.name||"")+'" data-email="'+esc(o.email||"")+'" type="button">Lizenz erstellen &amp; verknüpfen</button>'+
+          '<p class="tiny muted" style="margin-top:8px">Erzeugt einen Schlüssel, verknüpft ihn mit dieser Bestellung und setzt sie auf „bezahlt".</p>'
+        : '')
+    );
+  }
+  function ordCreateSheet(){
+    openSheet("Neue Bestellung",
+      '<div class="field"><label>Referenz (optional)</label><input class="input mono" id="noRef" placeholder="z. B. PayPal-ID / Datum"></div>'+
+      '<div class="field"><label>Name</label><input class="input" id="noName"></div>'+
+      '<div class="field"><label>E-Mail</label><input class="input" id="noEmail" type="email"></div>'+
+      '<div class="row">'+
+        '<div class="field grow"><label>Betrag (€)</label><input class="input" id="noAmount" type="number" step="0.01" value="'+esc(NT.priceValue||29)+'"></div>'+
+        '<div class="field grow"><label>Methode</label><select class="select" id="noMethod">'+
+          '<option value="Überweisung">Überweisung</option><option value="PayPal">PayPal</option><option value="sonstige">sonstige</option>'+
+        '</select></div>'+
+      '</div>'+
+      '<div class="field"><label>Notiz</label><textarea class="textarea" id="noNote" rows="2"></textarea></div>'+
+      '<button class="btn primary block lg" data-act="ord-create" type="button">Bestellung anlegen</button>'
+    );
+  }
+
+  /* ── Posteingang (IMAP) + Nachrichten-Log (DB) ───────────────────── */
+  function renderInbox(c, force){
+    c.innerHTML =
+      '<div class="op-toolbar">'+
+        '<div class="seg" id="pbSeg">'+
+          '<button data-m="imap" class="'+(state.mail.mode==="imap"?"on":"")+'">Postfach (IMAP)</button>'+
+          '<button data-m="log" class="'+(state.mail.mode==="log"?"on":"")+'">Nachrichten-Log</button>'+
+        '</div>'+
+        '<span class="grow" style="flex:1"></span>'+
+        '<button class="btn ghost sm" data-act="inbox-refresh" type="button">Aktualisieren</button>'+
+      '</div>'+
+      '<div id="inboxList"></div>';
+    if(state.mail.mode==="imap") loadImap(force); else loadLog(true);
+  }
+  async function loadImap(force){
+    var box=el("inboxList"); busy(box);
+    try{
+      var r = await mailApi("list");
+      state.mail.mails = r.mails||[]; state.mail.mailbox = r.mailbox||"";
+      var rows=state.mail.mails;
+      box.innerHTML = rows.length
+        ? '<div class="tbl-wrap"><div class="tbl-scroll"><table class="tbl"><thead><tr>'+
+            '<th></th><th>Von</th><th>Betreff</th><th>Datum</th><th></th></tr></thead><tbody>'+
+          rows.map(function(m){
+            return '<tr data-act="mail-open" data-uid="'+esc(m.uid)+'"'+(m.seen?'':' style="font-weight:700"')+'>'+
+              '<td>'+(m.seen?'':'<span class="badge warn" style="padding:2px 7px">neu</span>')+'</td>'+
+              '<td class="wrap">'+esc(m.from||m.fromAddr||"—")+'</td>'+
+              '<td class="wrap">'+esc(m.subject||"(ohne Betreff)")+'</td>'+
+              '<td>'+fmtDT(m.date)+'</td>'+
+              '<td><button class="btn danger sm" data-act="mail-del" data-uid="'+esc(m.uid)+'" type="button">Löschen</button></td>'+
+            '</tr>';
+          }).join("")+
+          '</tbody></table></div></div>'+
+          '<p class="tiny muted" style="margin-top:10px">Postfach: '+esc(state.mail.mailbox)+' · letzte '+rows.length+' Nachrichten</p>'
+        : '<div class="tbl-wrap"><div class="tbl-empty">Postfach ist leer.</div></div>';
+    }catch(err){
+      if(err.code==="mail_not_configured"){
+        box.innerHTML =
+          '<div class="card pad-lg" style="border-left:3px solid var(--warn)">'+
+          '<h3 style="margin:0 0 8px;font-size:15px">Posteingang noch nicht konfiguriert</h3>'+
+          '<p class="muted" style="margin:0 0 12px;font-size:13.5px">Damit hier E-Mails erscheinen, setze die Secrets der Function '+
+          '<span class="mono">naehrtakt-mail</span>:</p>'+
+          '<dl class="kv"><dt>MAIL_USER</dt><dd>Postfach-Adresse</dd><dt>MAIL_PASSWORD</dt><dd>Postfach-Passwort</dd>'+
+          '<dt>MAIL_HOST</dt><dd>optional (Std. imap.hostinger.com)</dd><dt>MAIL_PORT</dt><dd>optional (Std. 993)</dd></dl>'+
+          '<p class="tiny muted" style="margin-top:10px">Der Nachrichten-Log (oben umschalten) funktioniert auch ohne IMAP.</p></div>';
+      } else { errorBox(box, mapErr(err.code,err.status), "inbox"); }
+    }
+  }
+  async function loadLog(replace){
+    var box=el("inboxList"); if(replace) busy(box);
+    try{
+      var r = await adminApi("messages",{ limit:100, offset: replace?0:state.mail.log.length });
+      var rows=r.rows||[];
+      state.mail.log = replace?rows:state.mail.log.concat(rows);
+      state.mail.logDone = rows.length<100;
+      rows=state.mail.log;
+      box.innerHTML = rows.length
+        ? '<div class="tbl-wrap"><div class="tbl-scroll"><table class="tbl"><thead><tr>'+
+            '<th></th><th>Richtung</th><th>Von / An</th><th>Betreff</th><th>Datum</th></tr></thead><tbody>'+
+          rows.map(function(m){
+            var who = m.direction==="out" ? ("→ "+esc(m.to_addr||"")) : ("← "+esc(m.from_addr||""));
+            return '<tr data-act="log-open" data-id="'+esc(m.id)+'"'+(m.read?'':' style="font-weight:700"')+'>'+
+              '<td>'+(m.read?'':'<span class="badge warn" style="padding:2px 7px">neu</span>')+'</td>'+
+              '<td>'+(m.direction==="out"?'<span class="badge info">aus</span>':'<span class="badge">ein</span>')+'</td>'+
+              '<td class="wrap">'+who+'</td>'+
+              '<td class="wrap">'+esc(m.subject||"(ohne Betreff)")+'</td>'+
+              '<td>'+fmtDT(m.created_at)+'</td>'+
+            '</tr>';
+          }).join("")+
+          '</tbody></table></div></div>'+
+          (state.mail.logDone?'':'<div class="center" style="margin-top:14px"><button class="btn subtle sm" data-act="log-more" type="button">Mehr laden</button></div>')
+        : '<div class="tbl-wrap"><div class="tbl-empty">Kein Nachrichten-Log.</div></div>';
+    }catch(err){ errorBox(box, mapErr(err.code,err.status), "inbox"); }
+  }
+  async function openMail(uid){
+    openSheet("Nachricht", '<div class="center" style="padding:30px 0"><div class="op-spin"></div></div>');
+    try{
+      var m = await mailApi("get",{ uid: uid });
+      var h = m.headers||{};
+      var att = Array.isArray(m.attachments)?m.attachments:[];
+      var bodyHtml = m.html
+        ? '<div class="mail-body"><div class="mail-html">'+m.html+'</div></div>'
+        : '<div class="mail-body">'+esc(m.text||"(kein Textinhalt)").replace(/\n/g,"<br>")+'</div>';
+      setSheet(esc(h.subject||"(ohne Betreff)"),
+        '<dl class="kv">'+
+          '<dt>Von</dt><dd>'+esc(h.from||h.fromAddr||"—")+'</dd>'+
+          '<dt>An</dt><dd>'+esc(h.to||"—")+'</dd>'+
+          '<dt>Datum</dt><dd>'+fmtDT(h.date)+'</dd>'+
+        '</dl>'+ bodyHtml +
+        (att.length
+          ? '<h4 style="margin:16px 0 6px;font-size:14px">Anhänge ('+att.length+')</h4>'+
+            att.map(function(a){
+              return '<div class="att"><span class="grow" style="flex:1;min-width:0">'+esc(a.filename||("Anhang "+a.index))+
+                ' <span class="muted tiny">('+esc(a.mime||"")+(a.size?', '+Math.round(a.size/1024)+' KB':'')+')</span></span>'+
+                '<button class="btn subtle sm" data-act="mail-att" data-uid="'+esc(uid)+'" data-idx="'+esc(a.index)+'" '+
+                'data-name="'+esc(a.filename||("anhang-"+a.index))+'" type="button">Laden</button></div>';
+            }).join("")
+          : '')+
+        '<hr style="border:0;border-top:1px solid var(--line);margin:16px 0 12px">'+
+        '<button class="btn danger block" data-act="mail-del" data-uid="'+esc(uid)+'" type="button">In den Papierkorb</button>'
+      );
+    }catch(err){ setSheet("Fehler", '<p><span class="badge danger">Fehler</span> '+esc(mapErr(err.code,err.status))+'</p>'); }
+  }
+  function openLog(id){
+    var m = state.mail.log.filter(function(x){ return String(x.id)===String(id); })[0];
+    if(!m) return;
+    if(!m.read){ adminApi("message_update",{id:m.id,read:true}).then(function(){ m.read=true; }).catch(function(){}); }
+    openSheet(esc(m.subject||"(ohne Betreff)"),
+      '<dl class="kv">'+
+        '<dt>Richtung</dt><dd>'+(m.direction==="out"?"ausgehend":"eingehend")+'</dd>'+
+        '<dt>Von</dt><dd>'+esc(m.from_addr||"—")+'</dd>'+
+        '<dt>An</dt><dd>'+esc(m.to_addr||"—")+'</dd>'+
+        '<dt>Datum</dt><dd>'+fmtDT(m.created_at)+'</dd>'+
+      '</dl>'+
+      '<div class="mail-body">'+esc(m.body||"(kein Inhalt)").replace(/\n/g,"<br>")+'</div>'+
+      '<div class="row" style="margin-top:14px">'+
+        '<button class="btn subtle" data-act="log-toggle" data-id="'+esc(m.id)+'" data-read="'+(m.read?'0':'1')+'" type="button">'+
+          (m.read?'Als ungelesen':'Als gelesen')+'</button>'+
+        '<button class="btn danger" data-act="log-del" data-id="'+esc(m.id)+'" type="button">Löschen</button>'+
+      '</div>'
+    );
+  }
+
+  /* ── Werkzeuge ───────────────────────────────────────────────────── */
+  function renderTools(c){
+    c.innerHTML =
+      '<div class="stack">'+
+        '<div class="card pad-lg tool-card">'+
+          '<h3>Daten-Export</h3>'+
+          '<p>Kompletter JSON-Export (Lizenzen, Aktivierungen, Bestellungen, Nachrichten, Ereignisse) als Download.</p>'+
+          '<button class="btn primary" data-act="tool-export" type="button">JSON exportieren</button>'+
+        '</div>'+
+        '<div class="card pad-lg tool-card">'+
+          '<h3>Betreiber-Schlüssel wechseln</h3>'+
+          '<p>Rotiert den Zugang zu diesem Bereich. Der bisherige Schlüssel wird sofort ungültig.</p>'+
+          '<div class="hint-line" style="margin-bottom:14px">'+
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>'+
+            '<div>Neuen Schlüssel <b>sofort</b> in <span class="mono">OPERATOR-KEY.local.txt</span> sichern – er ist danach nicht wieder abrufbar.</div>'+
+          '</div>'+
+          '<div class="row" style="flex-wrap:wrap">'+
+            '<button class="btn accent" data-act="tool-genkey" type="button">Neuen Schlüssel generieren</button>'+
+            '<button class="btn ghost" data-act="tool-setkey" type="button">Eigenen Schlüssel setzen</button>'+
+          '</div>'+
+        '</div>'+
+        '<div class="card pad-lg tool-card">'+
+          '<h3>Abmelden</h3>'+
+          '<p>Beendet diese Sitzung auf diesem Gerät (der Schlüssel wird aus dem Sitzungsspeicher entfernt).</p>'+
+          '<button class="btn subtle" data-act="logout" type="button">Abmelden</button>'+
+        '</div>'+
+      '</div>';
+  }
+
+  /* ── Sheet (Modal) ───────────────────────────────────────────────── */
+  function openSheet(title, bodyHtml){
+    el("sheetRoot").innerHTML =
+      '<div class="sheet-back" id="sheetBack"><div class="sheet" role="dialog" aria-modal="true">'+
+      '<div class="sheet-head"><h3 id="sheetTitle">'+title+'</h3>'+
+      '<button class="sheet-x" data-act="sheet-close" type="button" aria-label="Schließen">×</button></div>'+
+      '<div class="sheet-body" id="sheetBody">'+bodyHtml+'</div></div></div>';
+    var back=el("sheetBack");
+    back.addEventListener("click",function(e){ if(e.target===back) closeSheet(); });
+  }
+  function setSheet(title, bodyHtml){
+    var t=el("sheetTitle"), b=el("sheetBody");
+    if(t) t.innerHTML=title; if(b) b.innerHTML=bodyHtml;
+  }
+  function closeSheet(){ el("sheetRoot").innerHTML=""; }
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeSheet(); });
+
+  /* ── Delegierte Klicks: Inhalt + Sheet ───────────────────────────── */
+  function confirmAsk(msg){ return window.confirm(msg); }
+
+  async function handleAct(act, t){
+    var id = t.getAttribute("data-id");
+    var uid = t.getAttribute("data-uid");
+
+    /* Navigation / retry */
+    if(act==="retry"){ switchTab(t.getAttribute("data-tab")||state.tab, true); return; }
+    if(act==="logout"){ doLogout(); return; }
+
+    /* Lizenzen */
+    if(act==="lic-search"){ doLicSearch(); return; }
+    if(act==="lic-more"){ loadLicenses(false); return; }
+    if(act==="lic-new"){ licCreateSheet(); return; }
+    if(act==="lic-open"){
+      var l = state.lic.rows.filter(function(x){return String(x.id)===String(id);})[0];
+      if(l) licSheet(l);
+      return;
+    }
+    if(act==="lic-save"){
+      try{
+        var r = await adminApi("license_update",{ id:+id,
+          name:val("edName"), email:val("edEmail"), note:val("edNote"), max_devices:+val("edMax")||undefined });
+        patchLic(r.license); toast("Gespeichert.","ok"); closeSheet();
+      }catch(err){ toast(mapErr(err.code,err.status),"err"); }
+      return;
+    }
+    if(act==="lic-block"||act==="lic-unblock"){
+      var ns = act==="lic-block"?"blocked":"active";
+      try{ var rr=await adminApi("license_status",{id:+id,status:ns}); patchLic(rr.license);
+        toast(ns==="blocked"?"Gesperrt.":"Entsperrt.","ok"); closeSheet(); }
+      catch(err){ toast(mapErr(err.code,err.status),"err"); }
+      return;
+    }
+    if(act==="lic-del"){
+      if(!confirmAsk('Lizenz '+(t.getAttribute("data-key")||"")+' wirklich löschen? Alle Aktivierungen werden entfernt.')) return;
+      try{ await adminApi("license_delete",{id:+id});
+        state.lic.rows=state.lic.rows.filter(function(x){return String(x.id)!==String(id);});
+        renderLicList(); toast("Lizenz gelöscht.","ok"); closeSheet(); }
+      catch(err){ toast(mapErr(err.code,err.status),"err"); }
+      return;
+    }
+    if(act==="lic-create"){
+      var order = t.getAttribute("data-order");
+      try{
+        var res = await adminApi("license_create",{
+          name:val("nlName"), email:val("nlEmail"), note:val("nlNote"),
+          max_devices:+val("nlMax")||5, order_id: order?+order:undefined });
+        var key = res.license && res.license.key;
+        showNewKey("Lizenz erstellt", key, "Schlüssel an den Käufer senden:");
+        state.lic.rows=[]; state.lic.done=false;
+        if(state.tab==="licenses") loadLicenses(true);
+        if(order && state.tab==="orders") loadOrders(true);
+      }catch(err){ toast(mapErr(err.code,err.status),"err"); }
+      return;
+    }
+    if(act==="dev-del"){
+      if(!confirmAsk("Dieses Gerät entfernen? Der Nutzer muss danach neu aktivieren.")) return;
+      try{ await adminApi("activation_delete",{id:+id}); toast("Gerät entfernt.","ok"); closeSheet();
+        if(state.tab==="licenses") loadLicenses(true); }
+      catch(err){ toast(mapErr(err.code,err.status),"err"); }
+      return;
+    }
+
+    /* Aktivierungen */
+    if(act==="act-del"){
+      if(!confirmAsk("Aktivierung entfernen? Das Gerät muss danach neu aktivieren.")) return;
+      try{ await adminApi("activation_delete",{id:+id});
+        state.act.rows=state.act.rows.filter(function(x){return String(x.id)!==String(id);});
+        renderActivations(el("tabContent")); toast("Aktivierung entfernt.","ok"); }
+      catch(err){ toast(mapErr(err.code,err.status),"err"); }
+      return;
+    }
+
+    /* Bestellungen */
+    if(act==="ord-more"){ loadOrders(false); return; }
+    if(act==="ord-new"){ ordCreateSheet(); return; }
+    if(act==="ord-open"){
+      var o=state.ord.rows.filter(function(x){return String(x.id)===String(id);})[0]; if(o) ordSheet(o); return;
+    }
+    if(act==="ord-save"){
+      try{ var or=await adminApi("order_update",{id:+id,status:val("odStatus"),note:val("odNote")});
+        patchOrd(or.order); toast("Gespeichert.","ok"); closeSheet(); }
+      catch(err){ toast(mapErr(err.code,err.status),"err"); }
+      return;
+    }
+    if(act==="ord-create"){
+      try{
+        var oc = await adminApi("order_create",{
+          ref:val("noRef")||undefined, name:val("noName"), email:val("noEmail"),
+          amount:+val("noAmount")||NT.priceValue||29, method:val("noMethod"), note:val("noNote") });
+        toast("Bestellung angelegt.","ok"); closeSheet(); loadOrders(true);
+        void oc;
+      }catch(err){ toast(mapErr(err.code,err.status),"err"); }
+      return;
+    }
+    if(act==="ord-mklic"){
+      licCreateSheet({ order_id:id, name:t.getAttribute("data-name"), email:t.getAttribute("data-email") });
+      return;
+    }
+
+    /* Posteingang */
+    if(act==="inbox-refresh"){ if(state.mail.mode==="imap") loadImap(true); else loadLog(true); return; }
+    if(act==="mail-open"){ openMail(uid); return; }
+    if(act==="mail-del"){
+      if(!confirmAsk("Nachricht in den Papierkorb verschieben?")) return;
+      try{ await mailApi("delete",{uid:uid});
+        state.mail.mails=state.mail.mails.filter(function(x){return String(x.uid)!==String(uid);});
+        closeSheet(); if(state.tab==="inbox"&&state.mail.mode==="imap") loadImap(true); toast("Verschoben.","ok"); }
+      catch(err){ toast(mapErr(err.code,err.status),"err"); }
+      return;
+    }
+    if(act==="mail-att"){
+      var idx=t.getAttribute("data-idx"), name=t.getAttribute("data-name")||("anhang-"+idx);
+      var old=t.textContent; t.disabled=true; t.textContent="Lädt …";
+      try{ var a=await mailApi("attachment",{uid:uid,index:+idx}); downloadB64(a.b64,a.filename||name,a.mime); toast("Anhang geladen.","ok"); }
+      catch(err){ toast(mapErr(err.code,err.status),"err"); }
+      finally{ t.disabled=false; t.textContent=old; }
+      return;
+    }
+    if(act==="log-open"){ openLog(id); return; }
+    if(act==="log-more"){ loadLog(false); return; }
+    if(act==="log-toggle"){
+      var rd = t.getAttribute("data-read")==="1";
+      try{ await adminApi("message_update",{id:+id,read:rd});
+        var mm=state.mail.log.filter(function(x){return String(x.id)===String(id);})[0]; if(mm) mm.read=rd;
+        closeSheet(); loadLog(true); toast("Aktualisiert.","ok"); }
+      catch(err){ toast(mapErr(err.code,err.status),"err"); }
+      return;
+    }
+    if(act==="log-del"){
+      if(!confirmAsk("Nachricht aus dem Log löschen?")) return;
+      try{ await adminApi("message_delete",{id:+id});
+        state.mail.log=state.mail.log.filter(function(x){return String(x.id)!==String(id);});
+        closeSheet(); loadLog(true); toast("Gelöscht.","ok"); }
+      catch(err){ toast(mapErr(err.code,err.status),"err"); }
+      return;
+    }
+
+    /* Werkzeuge */
+    if(act==="tool-export"){ doExport(t); return; }
+    if(act==="tool-genkey"){ doGenKey(); return; }
+    if(act==="tool-setkey"){ doSetKey(); return; }
+
+    /* Sheet */
+    if(act==="sheet-close"){ closeSheet(); return; }
+  }
+  function val(id){ var e=el(id); return e?e.value.trim():undefined; }
+  function patchLic(nl){ if(!nl) return; state.lic.rows=state.lic.rows.map(function(x){ return String(x.id)===String(nl.id)?Object.assign({},x,nl):x; }); renderLicList(); }
+  function patchOrd(no){ if(!no) return; state.ord.rows=state.ord.rows.map(function(x){ return String(x.id)===String(no.id)?Object.assign({},x,no):x; }); renderOrdList(); }
+
+  document.addEventListener("click", function(e){
+    var t = e.target.closest("[data-act]"); if(!t) return;
+    var act = t.getAttribute("data-act");
+    if(act==="lic-open"||act==="ord-open"||act==="mail-open"||act==="log-open"){
+      /* Row-Klicks: ignoriere, wenn ein Button in der Zeile getroffen wurde */
+      var inner = e.target.closest("button[data-act]");
+      if(inner && inner!==t){ return; }
+    }
+    handleAct(act, t);
+  });
+
+  /* Segment-Umschalter (Filter) */
+  document.addEventListener("click", function(e){
+    var seg = e.target.closest(".seg button"); if(!seg) return;
+    var parent = seg.parentElement;
+    if(parent.id==="licSeg"){ state.lic.status=seg.getAttribute("data-s")||""; state.lic.rows=[]; state.lic.offset=0; state.lic.done=false;
+      Array.prototype.forEach.call(parent.children,function(b){b.classList.toggle("on",b===seg);}); loadLicenses(true); }
+    else if(parent.id==="ordSeg"){ state.ord.status=seg.getAttribute("data-s")||""; state.ord.rows=[]; state.ord.offset=0; state.ord.done=false;
+      Array.prototype.forEach.call(parent.children,function(b){b.classList.toggle("on",b===seg);}); loadOrders(true); }
+    else if(parent.id==="pbSeg"){ state.mail.mode=seg.getAttribute("data-m")||"imap";
+      Array.prototype.forEach.call(parent.children,function(b){b.classList.toggle("on",b===seg);});
+      if(state.mail.mode==="imap") loadImap(false); else loadLog(true); }
+  });
+
+  /* ── Werkzeug-Aktionen ───────────────────────────────────────────── */
+  async function doExport(btn){
+    var old=btn.textContent; btn.disabled=true; btn.textContent="Exportiere …";
+    try{
+      var data = await adminApi("export");
+      var blob = new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+      var url=URL.createObjectURL(blob), a=document.createElement("a");
+      a.href=url; a.download="naehrtakt-export-"+new Date().toISOString().slice(0,10)+".json";
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){URL.revokeObjectURL(url);},1000);
+      toast("Export heruntergeladen.","ok");
+    }catch(err){ toast(mapErr(err.code,err.status),"err"); }
+    finally{ btn.disabled=false; btn.textContent=old; }
+  }
+  async function doGenKey(){
+    if(!confirmAsk("Neuen Betreiber-Schlüssel generieren? Der aktuelle Schlüssel wird sofort ungültig.")) return;
+    try{
+      var r = await adminApi("set_key");           // kein new_key ⇒ Server erzeugt & liefert Klartext
+      var nk = r.key;
+      if(nk){ state.adminKey=nk; try{ sessionStorage.setItem(SS_KEY,nk); }catch(_){}
+        showNewKey("Neuer Betreiber-Schlüssel", nk, "SOFORT in OPERATOR-KEY.local.txt speichern:"); }
+      else { toast("Schlüssel gewechselt.","ok"); }
+    }catch(err){ toast(mapErr(err.code,err.status),"err"); }
+  }
+  function doSetKey(){
+    openSheet("Eigenen Schlüssel setzen",
+      '<div class="field"><label>Neuer Schlüssel (mind. 12 Zeichen)</label>'+
+      '<input class="input mono" id="skVal" type="text" autocomplete="off" spellcheck="false" maxlength="80" placeholder="mind. 12 Zeichen"></div>'+
+      '<div id="skMsg"></div>'+
+      '<div class="hint-line" style="margin:6px 0 14px">'+
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>'+
+        '<div>Danach sofort in <span class="mono">OPERATOR-KEY.local.txt</span> sichern. Der bisherige Schlüssel wird ungültig.</div>'+
+      '</div>'+
+      '<button class="btn primary block" data-act="sk-confirm" type="button">Schlüssel setzen</button>');
+    var b=el("sheetBody");
+    b.addEventListener("click", async function onSet(e){
+      var t=e.target.closest('[data-act="sk-confirm"]'); if(!t) return;
+      var v = val("skVal")||"";
+      var msg=el("skMsg");
+      if(v.length<12){ msg.innerHTML='<p class="tiny" style="color:var(--danger);margin:0 0 10px">Mindestens 12 Zeichen.</p>'; return; }
+      if(!confirmAsk("Betreiber-Schlüssel jetzt auf den eingegebenen Wert setzen? Der aktuelle wird ungültig.")) return;
+      t.disabled=true; t.textContent="Setze …";
+      try{
+        await adminApi("set_key",{ new_key:v });    // eigener Schlüssel ⇒ KEIN Klartext zurück
+        state.adminKey=v; try{ sessionStorage.setItem(SS_KEY,v); }catch(_){}
+        closeSheet(); toast("Schlüssel gesetzt und Sitzung übernommen.","ok");
+      }catch(err){ t.disabled=false; t.textContent="Schlüssel setzen"; msg.innerHTML='<p class="tiny" style="color:var(--danger);margin:0 0 10px">'+esc(mapErr(err.code,err.status))+'</p>'; }
+    });
+  }
+  function showNewKey(title, key, lead){
+    openSheet(title,
+      (lead?'<p style="margin:0 0 10px;font-size:14px">'+esc(lead)+'</p>':'')+
+      '<div class="keybox" id="nkBox">'+esc(key)+'</div>'+
+      '<button class="btn subtle sm" id="nkCopy" type="button" style="margin-top:10px">Kopieren</button>'+
+      '<div class="hint-line" style="margin-top:14px">'+
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>'+
+        '<div>Dieser Schlüssel wird <b>nur jetzt</b> angezeigt. Sicher aufbewahren.</div>'+
+      '</div>'+
+      '<button class="btn primary block" data-act="sheet-close" type="button" style="margin-top:14px">Verstanden</button>');
+    var cp=el("nkCopy");
+    if(cp) cp.addEventListener("click",function(){
+      try{ navigator.clipboard.writeText(key).then(function(){ toast("Kopiert.","ok"); },function(){ toast("Bitte manuell kopieren.","err"); }); }
+      catch(_){ toast("Bitte manuell kopieren.","err"); }
+    });
+  }
+  function downloadB64(b64, filename, mime){
+    try{
+      var bin=atob(b64||""), len=bin.length, buf=new Uint8Array(len);
+      for(var i=0;i<len;i++) buf[i]=bin.charCodeAt(i);
+      var blob=new Blob([buf],{type:mime||"application/octet-stream"});
+      var url=URL.createObjectURL(blob), a=document.createElement("a");
+      a.href=url; a.download=filename||"anhang"; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){URL.revokeObjectURL(url);},1000);
+    }catch(e){ toast("Download fehlgeschlagen.","err"); }
+  }
+  function doLogout(){
+    try{ sessionStorage.removeItem(SS_KEY); }catch(_){}
+    state.adminKey=""; closeSheet();
+    state.lic={rows:[],offset:0,q:"",status:"",done:false,loading:false};
+    state.ord={rows:[],offset:0,status:"",done:false,loading:false};
+    state.act={rows:[],loading:false};
+    state.mail={mode:"imap",mails:[],mailbox:"",log:[],logOffset:0,logDone:false};
+    state.tab="overview";
+    showView("login"); loginMsg(""); setTimeout(function(){ el("loginKey").focus(); },60);
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>
