@@ -1,0 +1,35 @@
+{
+  "name": "Nährtakt – Nahrungsergänzung richtig getaktet",
+  "short_name": "Nährtakt",
+  "description": "Persönlicher Einnahme-Plan und Nachschlagewerk für Nahrungsergänzungsmittel: Zeitpunkte, Häufigkeit und Sicherheits-Abstände.",
+  "lang": "de",
+  "dir": "ltr",
+  "start_url": "app.html?src=pwa",
+  "scope": "./",
+  "id": "/naehrtakt-app",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "theme_color": "#0f7268",
+  "background_color": "#f4f7f6",
+  "categories": ["health", "lifestyle", "utilities"],
+  "icons": [
+    { "src": "assets/img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Mein Tagesplan",
+      "short_name": "Plan",
+      "url": "app.html?tab=plan&src=shortcut",
+      "icons": [{ "src": "assets/img/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Abstände prüfen",
+      "short_name": "Abstände",
+      "url": "app.html?tab=abstaende&src=shortcut",
+      "icons": [{ "src": "assets/img/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

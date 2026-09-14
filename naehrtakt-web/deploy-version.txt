@@ -1,0 +1,3 @@
+nt-v1-3e7c
+Naehrtakt - Vaydena - Softwareloesungen | statische PWA (Planer + Nachschlagewerk)
+Die erste Zeile ist der Deploy-Marker und wird nach dem Upload live per HTTPS geprueft.

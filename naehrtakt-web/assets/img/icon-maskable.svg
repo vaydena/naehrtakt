@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Nährtakt">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#12857a"/>
+      <stop offset="1" stop-color="#0a5049"/>
+    </linearGradient>
+  </defs>
+  <!-- Vollflächiger Hintergrund für maskable safe-zone -->
+  <rect width="512" height="512" fill="url(#g)"/>
+  <!-- Motiv innerhalb der 80%-Safezone (zentriert) -->
+  <g transform="translate(256,256)">
+    <path d="M-150 40 h70 l32 -128 l64 208 l40 -160 l32 80 h88"
+          fill="none" stroke="#ffffff" stroke-width="30"
+          stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="108" cy="-96" r="34" fill="#f0a53f"/>
+  </g>
+</svg>

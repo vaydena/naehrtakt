@@ -1,0 +1,821 @@
+{
+  "meta": {
+    "version": "1",
+    "updated": "2026-09-14",
+    "disclaimer": "Kein Medizinprodukt. Keine Heil-, Therapie- oder Indikationsaussagen. Die Angaben zu Verzehr, Timing und Höchstmengen dienen ausschließlich der Information. Alle Zahlen stammen aus belegten Quellen (BfR, EFSA/SCF, DGE, NIH ODS, Verbraucherzentrale); Stand siehe meta.updated. Höchstmengen/Upper Level beziehen sich auf gesunde Erwachsene. Bei gesundheitlichen Fragen bitte aerztlichen oder apothekerlichen Rat einholen.",
+    "sources": {
+      "BfR-2021": {
+        "name": "BfR - Hoechstmengenempfehlungen fuer Vitamine und Mineralstoffe in Nahrungsergaenzungsmitteln (konsolidierte Tabelle, Aktualisierungen 2021/2023/2024)",
+        "url": "https://www.bfr.bund.de/cm/343/hoechstmengenempfehlungen-des-bfr.pdf",
+        "jahr": 2021
+      },
+      "EFSA-UL": {
+        "name": "EFSA/SCF - Overview on Tolerable Upper Intake Levels (Summary, Version 11)",
+        "url": "https://www.efsa.europa.eu/sites/default/files/2023-11/ul_summary_tables-version-8.pdf",
+        "jahr": 2025
+      },
+      "EFSA-Omega3-2012": {
+        "name": "EFSA NDA Panel - Tolerable Upper Intake Level of EPA, DHA and DPA (supplementaere EPA+DHA bis 5 g/Tag)",
+        "url": "https://doi.org/10.2903/j.efsa.2012.2815",
+        "jahr": 2012
+      },
+      "EFSA-Curcumin-2010": {
+        "name": "EFSA ANS Panel - Re-evaluation of curcumin (E 100) as a food additive (ADI 3 mg/kg KG/Tag)",
+        "url": "https://doi.org/10.2903/j.efsa.2010.1679",
+        "jahr": 2010
+      },
+      "DGE": {
+        "name": "DGE - Referenzwerte fuer die Naehrstoffzufuhr",
+        "url": "https://www.dge.de/wissenschaft/referenzwerte/",
+        "jahr": 2024
+      },
+      "NIH-ODS": {
+        "name": "NIH Office of Dietary Supplements - Fact Sheets (Vitamin C, Iron, Zinc, Folate, Vitamin D u. a.)",
+        "url": "https://ods.od.nih.gov/factsheets/list-all/",
+        "jahr": 2024
+      },
+      "VZ": {
+        "name": "Verbraucherzentrale - Nahrungsergaenzungsmittel (Einnahme/Timing, Eisen, Melatonin)",
+        "url": "https://www.verbraucherzentrale.de/wissen/lebensmittel/nahrungsergaenzungsmittel",
+        "jahr": 2025
+      },
+      "BfArM-Melatonin": {
+        "name": "BfR/BfArM - Melatonin: Einstufung als zulassungspflichtiges Arzneimittel",
+        "url": "https://www.bfr.bund.de/veroeffentlichung/melatonin-als-arzneimittel-zulassungspflichtig-empfehlung-der-bundesinstitute-erfolgt-dosisunabhaengig/",
+        "jahr": 2023
+      }
+    }
+  },
+
+  "supplements": [
+    {
+      "id": "vitamin-a",
+      "name": "Vitamin A",
+      "aliases": ["Retinol", "Retinylester", "Retinylacetat", "Retinylpalmitat"],
+      "category": "vitamin-fett",
+      "unit": "µg",
+      "unitNote": "µg Retinol-Aequivalent (RE); 1 µg RE = 3,33 I.E.",
+      "summary": "Fettloesliches Vitamin (Retinol/Retinylester); speicherbar und daher besonders sicherheitsrelevant.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "mit-fett",
+        "note": "Fettloeslich - zu einer fetthaltigen Mahlzeit fuer bessere Aufnahme."
+      },
+      "limits": {
+        "bfr": { "value": 200, "unit": "µg", "source": "BfR-2021", "note": "NEM (2021): entweder kein Zusatz oder max. 0,2 mg (=200 µg) pro Tagesverzehrmenge. Vitamin-A-Supplementierung in der Schwangerschaft nur nach aerztlicher Ruecksprache. BfR-Vorschlag in Ueberarbeitung." },
+        "ul":  { "value": 3000, "unit": "µg RE", "source": "EFSA-UL", "note": "UL fuer vorgebildetes Vitamin A (Retinol/Retinylester), Erwachsene (EFSA NDA Panel 2024)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "beta-carotin",
+      "name": "Beta-Carotin",
+      "aliases": ["Betacarotin", "Provitamin A", "E 160a"],
+      "category": "vitamin-fett",
+      "unit": "mg",
+      "summary": "Provitamin A (Carotinoid), das der Koerper teilweise zu Vitamin A umwandelt.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "mit-fett",
+        "note": "Fettloeslich - zu einer fetthaltigen Mahlzeit."
+      },
+      "limits": {
+        "bfr": { "value": 3.5, "unit": "mg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (2021). BfR-Vorschlag in Ueberarbeitung." },
+        "ul":  { "value": null, "unit": "mg", "source": "EFSA-UL", "note": "Kein UL ableitbar. Raucherinnen/Raucher sollten beta-carotinhaltige NEM meiden; Einsatz von supplementaerem Beta-Carotin nur zur Deckung des Vitamin-A-Bedarfs (EFSA 2024)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "vitamin-d",
+      "name": "Vitamin D",
+      "aliases": ["Vitamin D3", "Cholecalciferol", "Colecalciferol", "Vitamin D2", "Ergocalciferol"],
+      "category": "vitamin-fett",
+      "unit": "µg",
+      "unitNote": "1 µg = 40 I.E.",
+      "summary": "Fettloesliches Vitamin, das der Koerper bei Sonnenlicht auch selbst in der Haut bilden kann.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "mit-fett",
+        "note": "Fettloeslich - zu einer fetthaltigen Mahlzeit fuer bessere Aufnahme."
+      },
+      "limits": {
+        "bfr": { "value": 20, "unit": "µg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (BfR 2023). 20 µg = 800 I.E." },
+        "ul":  { "value": 100, "unit": "µg", "source": "EFSA-UL", "note": "UL Erwachsene (EFSA 2018/2023). 100 µg = 4000 I.E." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "vitamin-e",
+      "name": "Vitamin E",
+      "aliases": ["Tocopherol", "Alpha-Tocopherol", "Tocopherylacetat"],
+      "category": "vitamin-fett",
+      "unit": "mg",
+      "unitNote": "mg alpha-Tocopherol-Aequivalent",
+      "summary": "Fettloesliches Vitamin (Tocopherole) mit antioxidativen Eigenschaften.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "mit-fett",
+        "note": "Fettloeslich - zu einer fetthaltigen Mahlzeit. Zeitlicher Abstand zu hoch dosiertem Vitamin K sinnvoll."
+      },
+      "limits": {
+        "bfr": { "value": 30, "unit": "mg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (2021). BfR-Hinweis: Maenner ab 55 Jahren sollten eine unkontrollierte Supplementierung vermeiden. BfR-Vorschlag in Ueberarbeitung." },
+        "ul":  { "value": 300, "unit": "mg", "source": "EFSA-UL", "note": "UL fuer alpha-Tocopherol, Erwachsene (SCF 2003). EFSA-Ueberpruefung lauft." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "vitamin-k2",
+      "name": "Vitamin K2",
+      "aliases": ["Menachinon", "MK-7", "Vitamin K"],
+      "category": "vitamin-fett",
+      "unit": "µg",
+      "summary": "Fettloesliches Vitamin (Menachinon); Vitamin K spielt eine Rolle bei Blutgerinnung und Knochenstoffwechsel.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "mit-fett",
+        "note": "Fettloeslich - zu einer fetthaltigen Mahlzeit. Wer gerinnungshemmende Medikamente einnimmt, sollte vor der Einnahme aerztlichen Rat einholen (BfR-Hinweis)."
+      },
+      "limits": {
+        "bfr": { "value": 25, "unit": "µg", "source": "BfR-2021", "note": "NEM-Hoechstmenge fuer Vitamin K2 (2021); fuer Vitamin K1 gilt 80 µg." },
+        "ul":  { "value": null, "unit": "µg", "source": "EFSA-UL", "note": "Kein UL ableitbar (SCF 2003)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "vitamin-c",
+      "name": "Vitamin C",
+      "aliases": ["Ascorbinsaeure", "L-Ascorbinsaeure"],
+      "category": "vitamin-wasser",
+      "unit": "mg",
+      "summary": "Wasserloesliches Vitamin (Ascorbinsaeure); verbessert u. a. die Aufnahme von pflanzlichem (Nicht-Haem-)Eisen.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "egal",
+        "note": "Ueber den Tag verteilt moeglich; zusammen mit einer eisenreichen Mahlzeit sinnvoll. Hohe Einzeldosen koennen Magen-Darm-Beschwerden verursachen."
+      },
+      "limits": {
+        "bfr": { "value": 250, "unit": "mg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (2021)." },
+        "ul":  { "value": 2000, "unit": "mg", "source": "NIH-ODS", "note": "EFSA hat keinen UL abgeleitet. Angegeben ist der US-UL (Food and Nutrition Board), Erwachsene 2000 mg/Tag." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL", "NIH-ODS"]
+    },
+    {
+      "id": "vitamin-b1",
+      "name": "Vitamin B1",
+      "aliases": ["Thiamin"],
+      "category": "vitamin-wasser",
+      "unit": "mg",
+      "summary": "Wasserloesliches B-Vitamin (Thiamin).",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["morgens"],
+        "withFood": "mit-essen",
+        "note": "Wasserloeslich; morgens/tagsueber zu einer Mahlzeit."
+      },
+      "limits": {
+        "bfr": { "value": null, "unit": "mg", "source": "BfR-2021", "note": "BfR (2021): keine Hoechstmenge festgelegt." },
+        "ul":  { "value": null, "unit": "mg", "source": "EFSA-UL", "note": "Kein UL ableitbar (SCF 2001)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "vitamin-b2",
+      "name": "Vitamin B2",
+      "aliases": ["Riboflavin"],
+      "category": "vitamin-wasser",
+      "unit": "mg",
+      "summary": "Wasserloesliches B-Vitamin (Riboflavin); kann den Urin voruebergehend harmlos gelb faerben.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["morgens"],
+        "withFood": "mit-essen",
+        "note": "Wasserloeslich; morgens/tagsueber zu einer Mahlzeit."
+      },
+      "limits": {
+        "bfr": { "value": null, "unit": "mg", "source": "BfR-2021", "note": "BfR (2021): keine Hoechstmenge festgelegt." },
+        "ul":  { "value": null, "unit": "mg", "source": "EFSA-UL", "note": "Kein UL ableitbar (SCF 2000)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "vitamin-b3-niacin",
+      "name": "Vitamin B3 (Niacin)",
+      "aliases": ["Niacin", "Nikotinamid", "Nicotinamid", "Nikotinsaeure", "Nicotinsaeure"],
+      "category": "vitamin-wasser",
+      "unit": "mg",
+      "summary": "Wasserloesliches B-Vitamin; als Nikotinamid oder Nikotinsaeure mit sehr unterschiedlichen Hoechstmengen.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["morgens"],
+        "withFood": "mit-essen",
+        "note": "Zu einer Mahlzeit. Nikotinsaeure kann harmlose Hautroetung (Flush) ausloesen."
+      },
+      "limits": {
+        "bfr": { "value": 160, "unit": "mg", "source": "BfR-2021", "note": "Gilt fuer Nikotinamid (2021). Nikotinsaeure max. 4,0 mg, Inosithexanicotinat max. 4,4 mg pro Tag. Ab mehr als 16 mg Nikotinamid/Tag Hinweis, dass Schwangere verzichten sollten." },
+        "ul":  { "value": 900, "unit": "mg", "source": "EFSA-UL", "note": "UL Nikotinamid Erwachsene 900 mg; UL Nikotinsaeure Erwachsene 10 mg (SCF 2002)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "vitamin-b5",
+      "name": "Vitamin B5",
+      "aliases": ["Pantothensaeure", "Calcium-D-Pantothenat", "Dexpanthenol"],
+      "category": "vitamin-wasser",
+      "unit": "mg",
+      "summary": "Wasserloesliches B-Vitamin (Pantothensaeure).",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["morgens"],
+        "withFood": "mit-essen",
+        "note": "Wasserloeslich; morgens/tagsueber zu einer Mahlzeit."
+      },
+      "limits": {
+        "bfr": { "value": null, "unit": "mg", "source": "BfR-2021", "note": "BfR (2021): keine Hoechstmenge festgelegt." },
+        "ul":  { "value": null, "unit": "mg", "source": "EFSA-UL", "note": "Kein UL ableitbar (SCF 2002)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "vitamin-b6",
+      "name": "Vitamin B6",
+      "aliases": ["Pyridoxin", "Pyridoxal", "Pyridoxamin", "Pyridoxin-Hydrochlorid"],
+      "category": "vitamin-wasser",
+      "unit": "mg",
+      "summary": "Wasserloesliches B-Vitamin; sicherheitsrelevant, da Grundlage des UL Nervenwirkungen bei dauerhaft hoher Zufuhr sind.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["morgens"],
+        "withFood": "mit-essen",
+        "note": "Wasserloeslich; morgens/tagsueber zu einer Mahlzeit."
+      },
+      "limits": {
+        "bfr": { "value": 0.9, "unit": "mg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (BfR 2023; zuvor 3,5 mg 2021)." },
+        "ul":  { "value": 12, "unit": "mg", "source": "EFSA-UL", "note": "UL Erwachsene (EFSA 2023; zuvor 25 mg SCF 2000)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "vitamin-b7-biotin",
+      "name": "Vitamin B7 (Biotin)",
+      "aliases": ["Biotin", "Vitamin H"],
+      "category": "vitamin-wasser",
+      "unit": "µg",
+      "summary": "Wasserloesliches B-Vitamin (Biotin); hohe Dosen koennen bestimmte Labortests verfaelschen.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["morgens"],
+        "withFood": "mit-essen",
+        "note": "Zu einer Mahlzeit. Vor Labortests Arzt/Laborpersonal ueber Biotin-Einnahme informieren (BfR-Hinweis)."
+      },
+      "limits": {
+        "bfr": { "value": null, "unit": "µg", "source": "BfR-2021", "note": "BfR (2021): keine Hoechstmenge festgelegt." },
+        "ul":  { "value": null, "unit": "µg", "source": "EFSA-UL", "note": "Kein UL ableitbar (SCF 2001)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "vitamin-b9-folsaeure",
+      "name": "Vitamin B9 (Folsaeure)",
+      "aliases": ["Folsaeure", "Folat", "Folacin", "Methylfolat", "5-MTHF"],
+      "category": "vitamin-wasser",
+      "unit": "µg",
+      "summary": "Wasserloesliches B-Vitamin (Folat/Folsaeure); fuer Frauen mit Kinderwunsch besonders relevant.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["morgens"],
+        "withFood": "egal",
+        "note": "Ueber den Tag unkritisch. Frauen mit Kinderwunsch/in der Fruehschwangerschaft: hoehere Zufuhr nur nach fachlicher Beratung."
+      },
+      "limits": {
+        "bfr": { "value": 200, "unit": "µg", "source": "BfR-2021", "note": "Allgemeine NEM-Hoechstmenge (BfR 2024). Fuer Frauen im gebaerfaehigen Alter und Schwangere im 1. Trimester nennt das BfR 400 µg zur Reduktion des Neuralrohrdefekt-Risikos. Bezieht sich auf Folsaeure; andere Folatquellen ueber EFSA-Umrechnungsfaktoren anpassen." },
+        "ul":  { "value": 1000, "unit": "µg", "source": "EFSA-UL", "note": "UL Erwachsene fuer zugesetzte Folsaeure/Methylfolat-Salze (EFSA 2023); natuerliches Nahrungsfolat ausgenommen." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "vitamin-b12",
+      "name": "Vitamin B12",
+      "aliases": ["Cobalamin", "Methylcobalamin", "Cyanocobalamin", "Hydroxocobalamin"],
+      "category": "vitamin-wasser",
+      "unit": "µg",
+      "summary": "Wasserloesliches B-Vitamin (Cobalamin); kommt v. a. in tierischen Lebensmitteln vor.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["morgens"],
+        "withFood": "egal",
+        "note": "Zeitpunkt unkritisch; morgens/tagsueber. Sehr hohe Folsaeuredosen koennen einen B12-Mangel verschleiern."
+      },
+      "limits": {
+        "bfr": { "value": 25, "unit": "µg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (2021)." },
+        "ul":  { "value": null, "unit": "µg", "source": "EFSA-UL", "note": "Kein UL; SCF (2000): keine definierten Schadwirkungen bei den untersuchten Zufuhren." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "calcium",
+      "name": "Calcium",
+      "aliases": ["Kalzium", "Calciumcarbonat", "Calciumcitrat"],
+      "category": "mineralstoff",
+      "unit": "mg",
+      "summary": "Mengenmineralstoff, v. a. fuer Knochen und Zaehne.",
+      "timing": {
+        "frequency": "1-2x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "mit-essen",
+        "note": "Einzeldosen bis ca. 500 mg werden besser aufgenommen; groessere Mengen auf mehrere Portionen verteilen. Abstand zu Eisen- und Zinkpraeparaten."
+      },
+      "limits": {
+        "bfr": { "value": 500, "unit": "mg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (2021). Ab 250 mg Calcium pro Portion: Hinweis, auf ein weiteres calciumhaltiges NEM zu verzichten." },
+        "ul":  { "value": 2500, "unit": "mg", "source": "EFSA-UL", "note": "UL Erwachsene fuer die Gesamtzufuhr (EFSA 2012)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL", "VZ"]
+    },
+    {
+      "id": "magnesium",
+      "name": "Magnesium",
+      "aliases": ["Magnesiumcitrat", "Magnesiumoxid", "Magnesiumbisglycinat"],
+      "category": "mineralstoff",
+      "unit": "mg",
+      "summary": "Mengenmineralstoff; hohe Einzeldosen koennen abfuehrend wirken.",
+      "timing": {
+        "frequency": "1-2x taeglich",
+        "slots": ["abends"],
+        "withFood": "egal",
+        "note": "Auf zwei oder mehr Portionen pro Tag verteilen (BfR-Hinweis); abends moeglich. Hohe Einzeldosen koennen den Stuhl erweichen."
+      },
+      "limits": {
+        "bfr": { "value": 250, "unit": "mg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (2021); Empfehlung, die Menge auf zwei oder mehr Portionen zu verteilen." },
+        "ul":  { "value": 250, "unit": "mg", "source": "EFSA-UL", "note": "UL Erwachsene, gilt nur fuer leicht loesliche Magnesiumsalze/-verbindungen aus NEM, Wasser oder angereicherten Lebensmitteln - nicht fuer natuerliches Magnesium in Lebensmitteln (SCF 2001)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "kalium",
+      "name": "Kalium",
+      "aliases": ["Kaliumcitrat", "Kaliumchlorid"],
+      "category": "mineralstoff",
+      "unit": "mg",
+      "summary": "Mengenmineralstoff und Elektrolyt.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "mit-essen",
+        "note": "Zu einer Mahlzeit."
+      },
+      "limits": {
+        "bfr": { "value": 500, "unit": "mg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (2021)." },
+        "ul":  { "value": null, "unit": "mg", "source": "EFSA-UL", "note": "Kein UL ableitbar (EFSA 2005)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "eisen",
+      "name": "Eisen",
+      "aliases": ["Ferrum", "Eisen(II)", "Eisenbisglycinat", "Eisenfumarat", "Eisensulfat"],
+      "category": "spurenelement",
+      "unit": "mg",
+      "summary": "Spurenelement; eine Supplementierung wird nur bei nachgewiesenem Bedarf empfohlen.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["morgens"],
+        "withFood": "nuechtern",
+        "note": "Nuechtern am besten aufnehmbar (bei empfindlichem Magen mit etwas Nahrung); zusammen mit Vitamin C. Abstand von ca. 2-3 Stunden zu Calcium, Kaffee, Tee und Milchprodukten."
+      },
+      "limits": {
+        "bfr": { "value": 6, "unit": "mg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (2021). BfR-Hinweis: Maenner, postmenopausale Frauen und Schwangere sollten Eisen nur nach aerztlicher Ruecksprache einnehmen. BfR-Vorschlag in Ueberarbeitung." },
+        "ul":  { "value": 40, "unit": "mg", "source": "EFSA-UL", "note": "EFSA (2024) leitet keinen UL ab; als safe level of intake fuer die Gesamtzufuhr werden 40 mg/Tag (Erwachsene) genannt." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL", "VZ", "NIH-ODS"]
+    },
+    {
+      "id": "zink",
+      "name": "Zink",
+      "aliases": ["Zinc", "Zinkgluconat", "Zinkbisglycinat", "Zinkcitrat"],
+      "category": "spurenelement",
+      "unit": "mg",
+      "summary": "Spurenelement; hohe Dauerdosen koennen den Kupferhaushalt beeintraechtigen.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "nuechtern",
+        "note": "Nuechtern oder zu einer leichten Mahlzeit (bei Magenreizung mit Essen). Abstand zu Eisen- und Calciumpraeparaten."
+      },
+      "limits": {
+        "bfr": { "value": 6.5, "unit": "mg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (2021)." },
+        "ul":  { "value": 25, "unit": "mg", "source": "EFSA-UL", "note": "UL Erwachsene fuer die Gesamtzufuhr (SCF 2002)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "kupfer",
+      "name": "Kupfer",
+      "aliases": ["Cuprum", "Kupfergluconat", "Kupfercitrat"],
+      "category": "spurenelement",
+      "unit": "mg",
+      "summary": "Spurenelement; steht im Wechselspiel mit Zink.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "egal",
+        "note": "Zeitpunkt unkritisch; Abstand zu hoch dosiertem Zink. Nicht fuer Kinder und Jugendliche (BfR-Hinweis)."
+      },
+      "limits": {
+        "bfr": { "value": 1, "unit": "mg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (2021); nicht fuer Kinder und Jugendliche." },
+        "ul":  { "value": 5, "unit": "mg", "source": "EFSA-UL", "note": "UL Erwachsene (SCF 2003). Die EFSA hat 2023 zusaetzlich einen ADI von 0,07 mg/kg KG/Tag abgeleitet." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "selen",
+      "name": "Selen",
+      "aliases": ["Selenium", "Natriumselenit", "Selenmethionin"],
+      "category": "spurenelement",
+      "unit": "µg",
+      "summary": "Spurenelement mit enger Spanne zwischen Bedarf und Hoechstmenge.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "egal",
+        "note": "Zeitpunkt unkritisch; zu einer Mahlzeit meist gut vertraeglich."
+      },
+      "limits": {
+        "bfr": { "value": 40, "unit": "µg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (BfR 2023; zuvor 45 µg 2021)." },
+        "ul":  { "value": 255, "unit": "µg", "source": "EFSA-UL", "note": "UL Erwachsene (EFSA 2023; zuvor 300 µg SCF 2006)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "jod",
+      "name": "Jod",
+      "aliases": ["Iod", "Iodine", "Kaliumiodid", "Jodid"],
+      "category": "spurenelement",
+      "unit": "µg",
+      "summary": "Spurenelement, das die Schilddruese fuer die Hormonbildung benoetigt.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["morgens"],
+        "withFood": "egal",
+        "note": "Zeitpunkt unkritisch. Bei Schilddruesenerkrankungen vor der Einnahme aerztlichen Rat einholen."
+      },
+      "limits": {
+        "bfr": { "value": 100, "unit": "µg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (2021); fuer Schwangere und Stillende nennt das BfR 150 µg." },
+        "ul":  { "value": 600, "unit": "µg", "source": "EFSA-UL", "note": "UL Erwachsene fuer die Gesamtzufuhr (SCF 2003)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "mangan",
+      "name": "Mangan",
+      "aliases": ["Manganese", "Mangansulfat", "Mangangluconat"],
+      "category": "spurenelement",
+      "unit": "mg",
+      "summary": "Spurenelement.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "egal",
+        "note": "Zeitpunkt unkritisch."
+      },
+      "limits": {
+        "bfr": { "value": 0.5, "unit": "mg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (2021). BfR-Vorschlag in Ueberarbeitung." },
+        "ul":  { "value": 8, "unit": "mg", "source": "EFSA-UL", "note": "EFSA (2023) leitet keinen UL ab; als safe level of intake werden 8 mg/Tag (Erwachsene) genannt." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "chrom",
+      "name": "Chrom",
+      "aliases": ["Chromium", "Chrom(III)", "Chrompicolinat"],
+      "category": "spurenelement",
+      "unit": "µg",
+      "summary": "Spurenelement (dreiwertiges Chrom, Cr III).",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "mit-essen",
+        "note": "Zu einer Mahlzeit."
+      },
+      "limits": {
+        "bfr": { "value": 60, "unit": "µg", "source": "BfR-2021", "note": "Hoechstmenge in NEM pro Tag (2021)." },
+        "ul":  { "value": null, "unit": "µg", "source": "EFSA-UL", "note": "Kein UL ableitbar fuer dreiwertiges Chrom (SCF 2003)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    },
+    {
+      "id": "omega-3",
+      "name": "Omega-3 (EPA/DHA)",
+      "aliases": ["Fischoel", "Algenoel", "EPA", "DHA", "Eicosapentaensaeure", "Docosahexaensaeure"],
+      "category": "omega",
+      "unit": "mg",
+      "summary": "Langkettige Omega-3-Fettsaeuren EPA und DHA, v. a. aus Fisch- oder Algenoel.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "mit-fett",
+        "note": "Zu einer fetthaltigen Mahlzeit; mit Nahrung meist besser vertraeglich (weniger Aufstossen)."
+      },
+      "limits": {
+        "bfr": { "value": null, "unit": "mg", "source": null, "note": "Keine BfR-Hoechstmenge fuer Omega-3-Fettsaeuren." },
+        "ul":  { "value": 5000, "unit": "mg", "source": "EFSA-Omega3-2012", "note": "Kein UL. EFSA (2012): ergaenzende Zufuhr von EPA+DHA kombiniert bis 5 g/Tag (=5000 mg) ohne Sicherheitsbedenken bei Erwachsenen; EPA allein bis 1,8 g/Tag." }
+      },
+      "sourceRefs": ["EFSA-Omega3-2012"]
+    },
+    {
+      "id": "coenzym-q10",
+      "name": "Coenzym Q10",
+      "aliases": ["Q10", "Ubichinon", "Ubiquinon", "Ubiquinol"],
+      "category": "sonstige",
+      "unit": "mg",
+      "summary": "Fettloesliche koerpereigene Substanz (Ubichinon).",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["morgens", "mittags"],
+        "withFood": "mit-fett",
+        "note": "Fettloeslich - zu einer fetthaltigen Mahlzeit; eher morgens/mittags."
+      },
+      "limits": {
+        "bfr": { "value": null, "unit": "mg", "source": null, "note": "Keine offizielle BfR-Hoechstmenge." },
+        "ul":  { "value": null, "unit": "mg", "source": null, "note": "Kein EFSA-UL abgeleitet." }
+      },
+      "sourceRefs": []
+    },
+    {
+      "id": "kreatin",
+      "name": "Kreatin",
+      "aliases": ["Creatin", "Kreatinmonohydrat", "Creatine"],
+      "category": "aminosaeure",
+      "unit": "g",
+      "summary": "Aus Aminosaeuren gebildete Substanz, die v. a. im Sportbereich verwendet wird.",
+      "timing": {
+        "frequency": "taeglich",
+        "slots": ["beliebig"],
+        "withFood": "egal",
+        "note": "Zeitpunkt unkritisch; entscheidend ist die regelmaessige taegliche Einnahme. Mit ausreichend Fluessigkeit."
+      },
+      "limits": {
+        "bfr": { "value": null, "unit": "g", "source": null, "note": "Keine offizielle BfR-Hoechstmenge." },
+        "ul":  { "value": null, "unit": "g", "source": null, "note": "Kein EFSA-UL. Typische taegliche Erhaltungsdosis liegt im Bereich von etwa 3 g." }
+      },
+      "sourceRefs": []
+    },
+    {
+      "id": "l-arginin",
+      "name": "L-Arginin",
+      "aliases": ["Arginin", "Arginine"],
+      "category": "aminosaeure",
+      "unit": "g",
+      "summary": "Semi-essenzielle Aminosaeure.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "nuechtern",
+        "note": "Nuechtern (zwischen den Mahlzeiten) meist besser aufnehmbar."
+      },
+      "limits": {
+        "bfr": { "value": null, "unit": "g", "source": null, "note": "Keine offizielle BfR-Hoechstmenge." },
+        "ul":  { "value": null, "unit": "g", "source": null, "note": "Kein EFSA-UL abgeleitet." }
+      },
+      "sourceRefs": []
+    },
+    {
+      "id": "l-carnitin",
+      "name": "L-Carnitin",
+      "aliases": ["Carnitin", "Carnitine", "Acetyl-L-Carnitin"],
+      "category": "aminosaeure",
+      "unit": "mg",
+      "summary": "Aus Aminosaeuren gebildete Substanz.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "egal",
+        "note": "Zeitpunkt unkritisch; zu einer Mahlzeit gut vertraeglich."
+      },
+      "limits": {
+        "bfr": { "value": null, "unit": "mg", "source": null, "note": "Keine offizielle BfR-Hoechstmenge." },
+        "ul":  { "value": null, "unit": "mg", "source": null, "note": "Kein EFSA-UL abgeleitet." }
+      },
+      "sourceRefs": []
+    },
+    {
+      "id": "probiotika",
+      "name": "Probiotika",
+      "aliases": ["Milchsaeurebakterien", "Lactobacillus", "Bifidobacterium", "Probiotikum"],
+      "category": "probiotikum",
+      "unit": "Mrd. KBE",
+      "unitNote": "Milliarden koloniebildende Einheiten (KBE / CFU)",
+      "summary": "Lebende Mikroorganismen; die Menge wird in koloniebildenden Einheiten (KBE) angegeben.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["morgens"],
+        "withFood": "mit-essen",
+        "note": "Haeufig zu oder kurz vor einer Mahlzeit; Herstellerangaben beachten."
+      },
+      "limits": {
+        "bfr": { "value": null, "unit": "Mrd. KBE", "source": null, "note": "Keine BfR-Hoechstmenge (keine allgemeine Mengenangabe moeglich)." },
+        "ul":  { "value": null, "unit": "Mrd. KBE", "source": null, "note": "Kein EFSA-UL." }
+      },
+      "sourceRefs": []
+    },
+    {
+      "id": "ballaststoffe-flohsamen",
+      "name": "Ballaststoffe (Flohsamen)",
+      "aliases": ["Flohsamen", "Flohsamenschalen", "Psyllium", "Indische Flohsamen"],
+      "category": "sonstige",
+      "unit": "g",
+      "summary": "Quellende Ballaststoffe (Flohsamenschalen), die reichlich Fluessigkeit binden.",
+      "timing": {
+        "frequency": "1-2x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "egal",
+        "note": "Immer mit reichlich Fluessigkeit (mind. ein grosses Glas Wasser) einnehmen. Abstand von ca. 30-60 Minuten zu Medikamenten und anderen Praeparaten, da deren Aufnahme verzoegert werden kann."
+      },
+      "limits": {
+        "bfr": { "value": null, "unit": "g", "source": null, "note": "Keine BfR-Hoechstmenge fuer Ballaststoffe." },
+        "ul":  { "value": null, "unit": "g", "source": "DGE", "note": "Kein UL. Die DGE empfiehlt eine Ballaststoff-Gesamtzufuhr von mindestens 30 g/Tag (Richtwert, keine Hoechstmenge)." }
+      },
+      "sourceRefs": ["DGE"]
+    },
+    {
+      "id": "melatonin",
+      "name": "Melatonin",
+      "aliases": ["N-Acetyl-5-methoxytryptamin"],
+      "category": "sonstige",
+      "unit": "mg",
+      "summary": "Koerpereigenes Hormon; der Rechtsstatus in Deutschland ist uneinheitlich (Nahrungsergaenzungsmittel oder zulassungspflichtiges Arzneimittel).",
+      "timing": {
+        "frequency": "abends bei Bedarf",
+        "slots": ["abends"],
+        "withFood": "egal",
+        "note": "Die EU-zugelassene Angabe bezieht sich auf die Aufnahme kurz vor dem Schlafengehen (Verbraucherzentrale). Keine Dosisempfehlung; nicht fuer Kinder."
+      },
+      "limits": {
+        "bfr": { "value": null, "unit": "mg", "source": "VZ", "note": "Fuer melatoninhaltige NEM gibt es keine festgelegten Hoechstmengen (Verbraucherzentrale). BfArM/BfR stufen melatoninhaltige Produkte haeufig als zulassungspflichtige Arzneimittel ein; Tagesdosen ab etwa 0,5 mg wurden regelmaessig als Arzneimittel bewertet. Endgueltige Einstufung durch die Laenderbehoerden." },
+        "ul":  { "value": null, "unit": "mg", "source": null, "note": "Kein EFSA-UL. Wegen des uneinheitlichen Rechtsstatus wird bewusst keine Hoechst-/Dosisangabe gemacht." }
+      },
+      "sourceRefs": ["VZ", "BfArM-Melatonin"]
+    },
+    {
+      "id": "kollagen",
+      "name": "Kollagen",
+      "aliases": ["Collagen", "Kollagenhydrolysat", "Kollagenpeptide"],
+      "category": "aminosaeure",
+      "unit": "g",
+      "summary": "Strukturprotein, das meist als Hydrolysat (Peptide) angeboten wird.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "egal",
+        "note": "Zeitpunkt unkritisch; loest sich in Wasser oder anderen Getraenken."
+      },
+      "limits": {
+        "bfr": { "value": null, "unit": "g", "source": null, "note": "Keine offizielle BfR-Hoechstmenge." },
+        "ul":  { "value": null, "unit": "g", "source": null, "note": "Kein EFSA-UL abgeleitet." }
+      },
+      "sourceRefs": []
+    },
+    {
+      "id": "curcumin",
+      "name": "Curcumin",
+      "aliases": ["Kurkuma", "Turmeric", "Kurkumaextrakt", "E 100"],
+      "category": "sonstige",
+      "unit": "mg",
+      "summary": "Gelber Farbstoff der Kurkumawurzel (auch als Zusatzstoff E 100).",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["beliebig"],
+        "withFood": "mit-fett",
+        "note": "Fettloeslich - zu einer fetthaltigen Mahlzeit; Kombinationen mit Piperin (schwarzer Pfeffer) sollen die Aufnahme verbessern."
+      },
+      "limits": {
+        "bfr": { "value": null, "unit": "mg", "source": null, "note": "Keine spezifische BfR-Hoechstmenge fuer Curcumin in NEM." },
+        "ul":  { "value": null, "unit": "mg", "source": "EFSA-Curcumin-2010", "note": "Kein UL. EFSA-ADI fuer Curcumin (E 100): 3 mg/kg Koerpergewicht/Tag (z. B. rund 210 mg bei 70 kg). Der ADI kann bei stark curcuminhaltigen NEM ueberschritten werden." }
+      },
+      "sourceRefs": ["EFSA-Curcumin-2010"]
+    },
+    {
+      "id": "vitamin-b-komplex",
+      "name": "Vitamin-B-Komplex",
+      "aliases": ["B-Komplex", "B-Vitamine", "Vitamin B Komplex"],
+      "category": "vitamin-wasser",
+      "unit": "verschieden",
+      "unitNote": "Kombinationspraeparat; Einheiten je B-Vitamin unterschiedlich (mg bzw. µg).",
+      "summary": "Kombination mehrerer B-Vitamine; die Hoechstmengen richten sich nach den einzelnen enthaltenen B-Vitaminen.",
+      "timing": {
+        "frequency": "1x taeglich",
+        "slots": ["morgens"],
+        "withFood": "mit-essen",
+        "note": "Morgens/tagsueber zu einer Mahlzeit, da B-Vitamine anregend wirken koennen."
+      },
+      "limits": {
+        "bfr": { "value": null, "unit": "verschieden", "source": "BfR-2021", "note": "Keine Sammel-Hoechstmenge; es gelten die BfR-Werte der einzelnen B-Vitamine (siehe B1, B2, B3, B5, B6, B7, B9, B12)." },
+        "ul":  { "value": null, "unit": "verschieden", "source": "EFSA-UL", "note": "Kein Sammel-UL; es gelten die EFSA/SCF-Werte der einzelnen B-Vitamine (relevant v. a. B6 und Niacin)." }
+      },
+      "sourceRefs": ["BfR-2021", "EFSA-UL"]
+    }
+  ],
+
+  "interactionPairs": [
+    {
+      "a": "eisen",
+      "b": "calcium",
+      "spacingHours": 2,
+      "kind": "hemmung",
+      "reason": "Calcium kann die Aufnahme von Eisen verringern; Eisen- und Calciumpraeparate mit etwa 2-3 Stunden Abstand einnehmen.",
+      "source": "VZ"
+    },
+    {
+      "a": "eisen",
+      "b": "zink",
+      "spacingHours": 2,
+      "kind": "konkurrenz",
+      "reason": "Eisen und Zink konkurrieren um dieselben Aufnahmewege; getrennt bzw. mit zeitlichem Abstand einnehmen.",
+      "source": "NIH-ODS"
+    },
+    {
+      "a": "zink",
+      "b": "kupfer",
+      "spacingHours": null,
+      "kind": "hemmung",
+      "reason": "Dauerhaft hohe Zinkdosen koennen die Kupferaufnahme senken und zu Kupfermangel fuehren; auf ein ausgewogenes Verhaeltnis achten.",
+      "source": "NIH-ODS"
+    },
+    {
+      "a": "calcium",
+      "b": "magnesium",
+      "spacingHours": null,
+      "kind": "hinweis",
+      "reason": "Hohe Einzeldosen beider Mineralstoffe besser ueber den Tag verteilen statt gemeinsam in einer grossen Dosis.",
+      "source": "VZ"
+    },
+    {
+      "a": "calcium",
+      "b": "zink",
+      "spacingHours": 2,
+      "kind": "hemmung",
+      "reason": "Hohe Calciumdosen koennen die Zinkaufnahme mindern; mit zeitlichem Abstand einnehmen.",
+      "source": "NIH-ODS"
+    },
+    {
+      "a": "vitamin-c",
+      "b": "eisen",
+      "spacingHours": null,
+      "kind": "synergie",
+      "reason": "Vitamin C verbessert die Aufnahme von pflanzlichem (Nicht-Haem-)Eisen; bewusst zusammen einnehmen.",
+      "source": "NIH-ODS"
+    },
+    {
+      "a": "vitamin-e",
+      "b": "vitamin-k2",
+      "spacingHours": null,
+      "kind": "hinweis",
+      "reason": "Sehr hohe Dosen Vitamin E koennen die Wirkung von Vitamin K auf die Blutgerinnung beeinflussen; hohe Dosen nicht unkontrolliert kombinieren.",
+      "source": "NIH-ODS"
+    },
+    {
+      "a": "vitamin-b9-folsaeure",
+      "b": "vitamin-b12",
+      "spacingHours": null,
+      "kind": "hinweis",
+      "reason": "Sehr hohe Folsaeuredosen koennen die Anzeichen eines Vitamin-B12-Mangels verschleiern; auf ausreichende B12-Versorgung achten.",
+      "source": "NIH-ODS"
+    },
+    {
+      "a": "vitamin-d",
+      "b": "calcium",
+      "spacingHours": null,
+      "kind": "synergie",
+      "reason": "Vitamin D foerdert die Calciumaufnahme im Darm; werden haeufig gemeinsam eingenommen.",
+      "source": "NIH-ODS"
+    },
+    {
+      "a": "vitamin-d",
+      "b": "magnesium",
+      "spacingHours": null,
+      "kind": "synergie",
+      "reason": "Magnesium ist am Vitamin-D-Stoffwechsel beteiligt; eine ausreichende Magnesiumversorgung ist sinnvoll.",
+      "source": "NIH-ODS"
+    },
+    {
+      "a": "vitamin-d",
+      "b": "vitamin-k2",
+      "spacingHours": null,
+      "kind": "hinweis",
+      "reason": "Beide sind fettloeslich und werden am besten zusammen zu einer fetthaltigen Mahlzeit eingenommen; haeufig als Kombipraeparat angeboten.",
+      "source": "VZ"
+    },
+    {
+      "a": "vitamin-b-komplex",
+      "b": "magnesium",
+      "spacingHours": null,
+      "kind": "hinweis",
+      "reason": "B-Vitamine koennen anregend wirken und werden eher morgens eingenommen, Magnesium eher abends - Timing entsprechend planen.",
+      "source": "VZ"
+    }
+  ]
+}
