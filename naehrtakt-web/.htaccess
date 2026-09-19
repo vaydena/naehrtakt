@@ -1,0 +1,17 @@
+# Nährtakt – Cache-Steuerung (Übergangsphase „wird überarbeitet").
+#
+# hCDN (Hostinger-CDN) cacht sw.js sonst tagelang über mehrere Edge-Knoten,
+# sodass zurückkehrende PWA-Clients den Service Worker nie erneuern. Mit
+# no-cache auf sw.js bekommt jeder Client die neuen (Selbstzerstörungs-)Bytes
+# und der alte App-Cache-SW wird ersetzt. HTML ebenfalls no-cache, damit der
+# Wechsel auf die Platzhalterseite überall sofort greift.
+<IfModule mod_headers.c>
+  <FilesMatch "^sw\.js$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>

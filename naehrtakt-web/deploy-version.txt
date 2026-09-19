@@ -1,3 +1,4 @@
-nt-v3-b8c1
-Naehrtakt - Vaydena - Softwareloesungen | statische PWA (Planer + Nachschlagewerk)
+nt-v4-rework
+Naehrtakt - Vaydena - Softwareloesungen | Uebergang: schlichte "Wird ueberarbeitet"-Platzhalterseite
+Altes Design v1 archiviert unter Git-Tag archive/design-v1; neues Design ersetzt spaeter den Platzhalter.
 Die erste Zeile ist der Deploy-Marker und wird nach dem Upload live per HTTPS geprueft.

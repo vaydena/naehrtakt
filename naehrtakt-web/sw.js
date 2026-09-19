@@ -1,108 +1,38 @@
-/* Nährtakt Service Worker – konservativ: nur GET + same-origin.
-   Cross-Origin (Supabase-Lizenz/Backend) und alle Nicht-GET-Requests
-   laufen unangetastet am SW vorbei. */
-const CACHE = "nt-app-v3";
-
-/* App-Shell + statische Assets + öffentliche Seiten, die offline verfügbar sein müssen. */
-const SHELL = [
-  "index.html",
-  "app.html",
-  "freischalten.html",
-  "zahlung.html",
-  "impressum.html",
-  "datenschutz.html",
-  "manifest.webmanifest",
-  "assets/app.css",
-  "assets/site.css",
-  "assets/config.js",
-  "assets/engine.js",
-  "assets/license.js",
-  "assets/app.js",
-  "assets/install.js",
-  "assets/qrcode-generator.js",
-  "assets/img/favicon.svg",
-  "assets/img/favicon-32.png",
-  "assets/img/icon-180.png",
-  "assets/img/icon-192.png",
-  "assets/img/icon-512.png",
-  "assets/img/icon-maskable-512.png",
-  "assets/data/supplements.json"
-];
-
-self.addEventListener("install", (e) => {
-  e.waitUntil(
-    caches.open(CACHE).then((c) =>
-      // einzeln adden, damit ein fehlendes File (z. B. noch keine supplements.json)
-      // die Installation nicht komplett scheitern lässt
-      Promise.all(SHELL.map((u) => c.add(u).catch(() => null)))
-    ).then(() => self.skipWaiting())
-  );
+/* Nährtakt Service Worker — SELBSTZERSTÖRUNG (Übergangsphase „wird überarbeitet").
+ *
+ * Diese Version ersetzt den alten App-Cache-SW (nt-app-v1/-v2/-v3). Sie:
+ *   1. löscht ALLE Caches (die offline gebündelte alte App),
+ *   2. meldet sich selbst ab (unregister),
+ *   3. lädt offene Fenster neu → frische Platzhalterseite,
+ * und fängt danach keinen Request mehr ab. So verschwindet die alte, offline
+ * gecachte App bei Rückkehrern und installierten PWA-Clients sauber; die
+ * Platzhalter- (und später die neue Design-)Seite wird immer frisch vom Netz
+ * geladen.
+ *
+ * Wichtig: hCDN cacht sw.js sonst tagelang über mehrere Edge-Knoten — die
+ * begleitende .htaccess setzt daher no-cache auf sw.js, damit jeder Client
+ * diese neuen Bytes tatsächlich bekommt und der alte SW ersetzt wird.
+ */
+self.addEventListener("install", () => {
+  self.skipWaiting();
 });
 
 self.addEventListener("activate", (e) => {
-  e.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim())
-  );
+  e.waitUntil((async () => {
+    // 1) alle Caches löschen (u. a. nt-app-v1 / nt-app-v2 / nt-app-v3)
+    try {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => caches.delete(k)));
+    } catch (_) {}
+    // 2) diesen Service Worker abmelden
+    try { await self.registration.unregister(); } catch (_) {}
+    // 3) offene Fenster übernehmen und neu laden (frische Platzhalterseite)
+    try {
+      await self.clients.claim();
+      const wins = await self.clients.matchAll({ type: "window" });
+      await Promise.all(wins.map((c) => c.navigate(c.url).catch(() => {})));
+    } catch (_) {}
+  })());
 });
 
-/* Nachricht aus der App: sofort aktivieren (nach Update). */
-self.addEventListener("message", (e) => {
-  if (e.data === "skipWaiting") self.skipWaiting();
-});
-
-function isHTML(req) {
-  return req.mode === "navigate" ||
-    (req.headers.get("accept") || "").includes("text/html");
-}
-
-self.addEventListener("fetch", (e) => {
-  const req = e.request;
-  if (req.method !== "GET") return;                       // POST/PUT … durchlassen
-  const url = new URL(req.url);
-  if (url.origin !== self.location.origin) return;        // Cross-Origin durchlassen
-
-  // Frische Daten bevorzugen: supplements.json = network-first
-  if (url.pathname.endsWith("/assets/data/supplements.json")) {
-    e.respondWith(networkFirst(req));
-    return;
-  }
-
-  // HTML/Navigation: network-first (immer neueste Seite, offline aus Cache)
-  if (isHTML(req)) {
-    e.respondWith(networkFirst(req));
-    return;
-  }
-
-  // Statische Assets: cache-first mit Hintergrund-Aktualisierung
-  e.respondWith(staleWhileRevalidate(req));
-});
-
-async function networkFirst(req) {
-  const cache = await caches.open(CACHE);
-  try {
-    const res = await fetch(req);
-    if (res && res.ok) cache.put(req, res.clone());
-    return res;
-  } catch (_) {
-    const cached = await cache.match(req);
-    if (cached) return cached;
-    // Navigations-Fallback auf die App-Shell
-    if (isHTML(req)) {
-      const shell = await cache.match("app.html");
-      if (shell) return shell;
-    }
-    throw _;
-  }
-}
-
-async function staleWhileRevalidate(req) {
-  const cache = await caches.open(CACHE);
-  const cached = await cache.match(req);
-  const network = fetch(req).then((res) => {
-    if (res && res.ok) cache.put(req, res.clone());
-    return res;
-  }).catch(() => null);
-  return cached || network || fetch(req);
-}
+/* Kein fetch-Handler: alle Requests laufen unverändert ans Netz. */
